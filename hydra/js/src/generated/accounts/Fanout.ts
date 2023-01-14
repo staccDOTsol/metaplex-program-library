@@ -29,9 +29,10 @@ export type FanoutArgs = {
   membershipModel: MembershipModel;
   membershipMint: beet.COption<web3.PublicKey>;
   totalStakedShares: beet.COption<beet.bignum>;
+  payerRewardBasisPoints: beet.bignum;
 };
 
-const fanoutDiscriminator = [164, 101, 210, 92, 222, 14, 75, 156];
+export const fanoutDiscriminator = [164, 101, 210, 92, 222, 14, 75, 156];
 /**
  * Holds the data for the {@link Fanout} Account and provides de/serialization
  * functionality for that data
@@ -54,6 +55,7 @@ export class Fanout implements FanoutArgs {
     readonly membershipModel: MembershipModel,
     readonly membershipMint: beet.COption<web3.PublicKey>,
     readonly totalStakedShares: beet.COption<beet.bignum>,
+    readonly payerRewardBasisPoints: beet.bignum,
   ) {}
 
   /**
@@ -74,6 +76,7 @@ export class Fanout implements FanoutArgs {
       args.membershipModel,
       args.membershipMint,
       args.totalStakedShares,
+      args.payerRewardBasisPoints,
     );
   }
 
@@ -94,12 +97,25 @@ export class Fanout implements FanoutArgs {
   static async fromAccountAddress(
     connection: web3.Connection,
     address: web3.PublicKey,
+    commitmentOrConfig?: web3.Commitment | web3.GetAccountInfoConfig,
   ): Promise<Fanout> {
-    const accountInfo = await connection.getAccountInfo(address);
+    const accountInfo = await connection.getAccountInfo(address, commitmentOrConfig);
     if (accountInfo == null) {
       throw new Error(`Unable to find Fanout account at ${address}`);
     }
     return Fanout.fromAccountInfo(accountInfo, 0)[0];
+  }
+
+  /**
+   * Provides a {@link web3.Connection.getProgramAccounts} config builder,
+   * to fetch accounts matching filters that can be specified via that builder.
+   *
+   * @param programId - the program that owns the accounts we are filtering
+   */
+  static gpaBuilder(
+    programId: web3.PublicKey = new web3.PublicKey('hyDQ4Nz1eYyegS6JfenyKwKzYxRsCWCriYSAjtzP4Vg'),
+  ) {
+    return beetSolana.GpaBuilder.fromStruct(programId, fanoutBeet);
   }
 
   /**
@@ -221,6 +237,17 @@ export class Fanout implements FanoutArgs {
       membershipModel: 'MembershipModel.' + MembershipModel[this.membershipModel],
       membershipMint: this.membershipMint,
       totalStakedShares: this.totalStakedShares,
+      payerRewardBasisPoints: (() => {
+        const x = <{ toNumber: () => number }>this.payerRewardBasisPoints;
+        if (typeof x.toNumber === 'function') {
+          try {
+            return x.toNumber();
+          } catch (_) {
+            return x;
+          }
+        }
+        return x;
+      })(),
     };
   }
 }
@@ -250,6 +277,7 @@ export const fanoutBeet = new beet.FixableBeetStruct<
     ['membershipModel', membershipModelBeet],
     ['membershipMint', beet.coption(beetSolana.publicKey)],
     ['totalStakedShares', beet.coption(beet.u64)],
+    ['payerRewardBasisPoints', beet.u64],
   ],
   Fanout.fromArgs,
   'Fanout',

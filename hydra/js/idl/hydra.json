@@ -311,6 +311,298 @@
       ]
     },
     {
+      "name": "processClockDistributeNft",
+      "accounts": [
+        {
+          "name": "hydra",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "membershipMintTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "membershipKey",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "membershipVoucher",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanout",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holdingAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutForMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutForMintMembershipVoucher",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutMintMemberTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payerTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "distributeForMint",
+          "type": "bool"
+        }
+      ],
+      "returns": {
+        "defined": "clockwork_sdk::state::ThreadResponse"
+      }
+    },
+    {
+      "name": "processClockDistributeWallet",
+      "accounts": [
+        {
+          "name": "hydra",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "membershipVoucher",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanout",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holdingAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutForMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutForMintMembershipVoucher",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutMintMemberTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payerTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "distributeForMint",
+          "type": "bool"
+        }
+      ],
+      "returns": {
+        "defined": "clockwork_sdk::state::ThreadResponse"
+      }
+    },
+    {
+      "name": "processClockDistributeToken",
+      "accounts": [
+        {
+          "name": "hydra",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "membershipMintTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "membershipVoucher",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanout",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holdingAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutForMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutForMintMembershipVoucher",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "fanoutMintMemberTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "membershipMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "memberStakeAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payerTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "distributeForMint",
+          "type": "bool"
+        }
+      ],
+      "returns": {
+        "defined": "clockwork_sdk::state::ThreadResponse"
+      }
+    },
+    {
       "name": "processDistributeNft",
       "accounts": [
         {
@@ -766,6 +1058,10 @@
             "type": {
               "option": "u64"
             }
+          },
+          {
+            "name": "payerRewardBasisPoints",
+            "type": "u64"
           }
         ]
       }
@@ -1033,12 +1329,17 @@
       "code": 6024,
       "name": "InvalidCloseAccountDestination",
       "msg": "Sending Sol to a SPL token destination will render the sol unusable"
+    },
+    {
+      "code": 6025,
+      "name": "PayerATANotSupplied",
+      "msg": "Payer ATA Not Supplied"
     }
   ],
   "metadata": {
     "address": "hyDQ4Nz1eYyegS6JfenyKwKzYxRsCWCriYSAjtzP4Vg",
     "origin": "anchor",
-    "binaryVersion": "0.24.2",
-    "libVersion": "0.24.2"
+    "binaryVersion": "0.25.0",
+    "libVersion": "0.25.0"
   }
 }

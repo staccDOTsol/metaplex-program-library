@@ -529,6 +529,26 @@ createErrorFromNameLookup.set(
 );
 
 /**
+ * PayerATANotSupplied: 'Payer ATA Not Supplied'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class PayerATANotSuppliedError extends Error {
+  readonly code: number = 0x1789;
+  readonly name: string = 'PayerATANotSupplied';
+  constructor() {
+    super('Payer ATA Not Supplied');
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, PayerATANotSuppliedError);
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1789, () => new PayerATANotSuppliedError());
+createErrorFromNameLookup.set('PayerATANotSupplied', () => new PayerATANotSuppliedError());
+
+/**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors
  * @category generated

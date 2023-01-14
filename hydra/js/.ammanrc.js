@@ -10,6 +10,10 @@ const hydraValidator = {
 
 const validator = {
   hydraValidator,
-  programs: [base.programs.metadata, base.programs.hydra],
+  programs: [base.programs.metadata, base.programs.hydra,   {
+    label: 'Clockwork',
+    programId: '3XXuUFfweXBwFgFfYaejLvZE4cGZiHgKiGfMtdxNzYmv',
+    deployPath: '../../../clockwork/target/deploy/clockwork_thread_program.so',
+  }],
 };
 module.exports = { validator };

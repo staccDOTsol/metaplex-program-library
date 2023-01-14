@@ -26,6 +26,7 @@ import {
   createProcessDistributeNftInstruction,
   createProcessDistributeTokenInstruction,
   createProcessDistributeWalletInstruction,
+  createProcessClockDistributeTokenInstruction,
   createProcessInitForMintInstruction,
   createProcessInitInstruction,
   createProcessRemoveMemberInstruction,
@@ -40,7 +41,7 @@ import { Fanout } from './generated/accounts';
 import { PROGRAM_ADDRESS as TM_PROGRAM_ADDRESS } from '@metaplex-foundation/mpl-token-metadata';
 import bs58 from 'bs58';
 import { chunks } from './utils';
-
+import { Token } from '@solana/spl-token'
 export * from './generated/types';
 export * from './generated/accounts';
 export * from './generated/errors';
@@ -103,6 +104,18 @@ interface DistributeMemberArgs {
 
 interface DistributeTokenMemberArgs {
   distributeForMint: boolean;
+  member: PublicKey;
+  membershipMint: PublicKey;
+  fanout: PublicKey;
+  fanoutMint?: PublicKey;
+  membershipMintTokenAccount?: PublicKey;
+  payer: PublicKey;
+}
+
+interface DistributeClockTokenMemberArgs {
+  distributeForMint: boolean;
+  payerTokenAccount: PublicKey;
+  hydra: PublicKey;
   member: PublicKey;
   membershipMint: PublicKey;
   fanout: PublicKey;
@@ -388,7 +401,6 @@ export class FanoutClient {
         TOKEN_PROGRAM_ID,
         opts.mint,
         opts.fanout,
-        true,
       ));
     instructions.push(
       Token.createAssociatedTokenAccountInstruction(
@@ -518,7 +530,6 @@ export class FanoutClient {
       TOKEN_PROGRAM_ID,
       mint,
       voucher,
-      true,
     );
     const membershipMintTokenAccount =
       opts.membershipMintTokenAccount ||
@@ -527,7 +538,6 @@ export class FanoutClient {
         TOKEN_PROGRAM_ID,
         mint,
         opts.member,
-        true,
       ));
     instructions.push(
       createProcessUnstakeInstruction({
@@ -573,7 +583,6 @@ export class FanoutClient {
       TOKEN_PROGRAM_ID,
       mint,
       voucher,
-      true,
     );
     const membershipMintTokenAccount =
       opts.membershipMintTokenAccount ||
@@ -582,7 +591,6 @@ export class FanoutClient {
         TOKEN_PROGRAM_ID,
         mint,
         auth,
-        true,
       ));
     try {
       await this.connection.getTokenAccountBalance(stakeAccount);
@@ -827,6 +835,124 @@ export class FanoutClient {
           membershipMintTokenAccount: membershipMintTokenAccount,
           fanoutMintMemberTokenAccount,
           payer: opts.payer,
+          member: opts.member,
+          fanout: opts.fanout,
+        },
+        {
+          distributeForMint: opts.distributeForMint,
+        },
+      ),
+    );
+
+    return {
+      output: {
+        membershipVoucher,
+        fanoutForMintMembershipVoucher,
+        holdingAccount,
+      },
+      instructions,
+      signers,
+    };
+  }
+
+  async distributeClockTokenMemberInstructions(opts: DistributeClockTokenMemberArgs): Promise<
+    InstructionResult<{
+      membershipVoucher: PublicKey;
+      fanoutForMintMembershipVoucher?: PublicKey;
+      holdingAccount: PublicKey;
+    }>
+  > {
+    const instructions: TransactionInstruction[] = [];
+    const signers: Signer[] = [];
+    const fanoutMint = opts.fanoutMint || NATIVE_MINT;
+    let holdingAccount;
+    const [fanoutForMint] = await FanoutClient.fanoutForMintKey(opts.fanout, fanoutMint);
+    const fanoutMintMemberTokenAccount = await Token.getAssociatedTokenAddress(
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+      TOKEN_PROGRAM_ID,
+      fanoutMint,
+      opts.member,
+      true,
+    );
+    const [fanoutForMintMembershipVoucher] = await FanoutClient.mintMembershipVoucher(
+      fanoutForMint,
+      opts.member,
+      fanoutMint,
+    );
+
+    if (opts.distributeForMint) {
+      holdingAccount = await Token.getAssociatedTokenAddress(
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+        TOKEN_PROGRAM_ID,
+        fanoutMint,
+        opts.fanout,
+        true,
+      );
+      try {
+        await this.connection.getTokenAccountBalance(fanoutMintMemberTokenAccount);
+      } catch (e) {
+        instructions.push(
+          Token.createAssociatedTokenAccountInstruction(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            fanoutMint,
+            fanoutMintMemberTokenAccount,
+            opts.member,
+            opts.payer,
+          ),
+        );
+      }
+    } else {
+      const [nativeAccount, _nativeAccountBump] = await FanoutClient.nativeAccount(opts.fanout);
+      holdingAccount = nativeAccount;
+    }
+    const [membershipVoucher] = await FanoutClient.membershipVoucher(opts.fanout, opts.member);
+    const stakeAccount = await Token.getAssociatedTokenAddress(
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+      TOKEN_PROGRAM_ID,
+      opts.membershipMint,
+      membershipVoucher,
+      true,
+    );
+    const membershipMintTokenAccount =
+      opts.membershipMintTokenAccount ||
+      (await Token.getAssociatedTokenAddress(
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+        TOKEN_PROGRAM_ID,
+        opts.membershipMint,
+        opts.member,
+        true,
+      ));
+    try {
+      await this.connection.getTokenAccountBalance(stakeAccount);
+    } catch (e) {
+      instructions.push(
+        await Token.createAssociatedTokenAccountInstruction(
+          ASSOCIATED_TOKEN_PROGRAM_ID,
+          TOKEN_PROGRAM_ID,
+          opts.membershipMint,
+          stakeAccount,
+          membershipVoucher,
+          opts.payer,
+        ),
+      );
+    }
+    instructions.push(
+      createProcessClockDistributeTokenInstruction(
+        {
+          hydra: opts.hydra,
+          memberStakeAccount: stakeAccount,
+          membershipMint: opts.membershipMint,
+          fanoutForMint: fanoutForMint,
+          fanoutMint: fanoutMint,
+          membershipVoucher: membershipVoucher,
+          fanoutForMintMembershipVoucher,
+          holdingAccount,
+          membershipMintTokenAccount: membershipMintTokenAccount,
+          fanoutMintMemberTokenAccount,
+          payer: opts.payer,
+          authority: opts.payer,
+          payerTokenAccount: opts.payerTokenAccount,
           member: opts.member,
           fanout: opts.fanout,
         },
