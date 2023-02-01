@@ -454,7 +454,7 @@
 
 "@metaplex-foundation/amman@^0.12.1":
   version "0.12.1"
-  resolved "https://registry.npmjs.org/@metaplex-foundation/amman/-/amman-0.12.1.tgz"
+  resolved "https://registry.yarnpkg.com/@metaplex-foundation/amman/-/amman-0.12.1.tgz#8d135fa4e4ac4667133762eca02e6cc221e7f656"
   integrity sha512-F3cdHr11ByLGMCrSBRvRCf5uIlhLE+5sWaHT2ZzcE6zVyDta3gs/A12ZBzYZS8ugNETNpJySfB42kMp1VZwbUA==
   dependencies:
     "@metaplex-foundation/amman-client" "^0.2.0"

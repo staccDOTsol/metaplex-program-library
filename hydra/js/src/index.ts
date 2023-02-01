@@ -114,7 +114,6 @@ interface DistributeTokenMemberArgs {
 
 interface DistributeClockTokenMemberArgs {
   distributeForMint: boolean;
-  payerTokenAccount: PublicKey;
   hydra: PublicKey;
   member: PublicKey;
   membershipMint: PublicKey;
@@ -808,6 +807,7 @@ export class FanoutClient {
         opts.member,
         true,
       ));
+      
     try {
       await this.connection.getTokenAccountBalance(stakeAccount);
     } catch (e) {
@@ -937,6 +937,14 @@ export class FanoutClient {
         ),
       );
     }
+    const payerTokenAccount =
+      (await Token.getAssociatedTokenAddress(
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+        TOKEN_PROGRAM_ID,
+        opts.membershipMint,
+        opts.hydra,
+        true,
+      ));
     instructions.push(
       createProcessClockDistributeTokenInstruction(
         {
@@ -952,7 +960,7 @@ export class FanoutClient {
           fanoutMintMemberTokenAccount,
           payer: opts.payer,
           authority: opts.payer,
-          payerTokenAccount: opts.payerTokenAccount,
+          payerTokenAccount: payerTokenAccount,
           member: opts.member,
           fanout: opts.fanout,
         },

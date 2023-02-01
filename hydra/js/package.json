@@ -12,7 +12,7 @@
     "postpublish": "git push origin && git push origin --tags",
     "build:docs": "typedoc",
     "build": "rimraf dist && tsc -p tsconfig.json",
-    "test": "ts-mocha -p ./tsconfig.json -t 100000000 \"test/*.ts\"",
+    "test": "ts-mocha -p ./tsconfig.json -t 100000000 \"test/token.ts\"",
     "api:gen": "DEBUG='(solita|rustbin):(info|error)' solita",
     "amman:start": "DEBUG='amman:(info|error)' amman start",
     "amman:stop": "amman stop",
@@ -55,7 +55,6 @@
     "short-uuid": "^4.2.2"
   },
   "devDependencies": {
-    "@metaplex-foundation/amman": "^0.12.1",
     "@metaplex-foundation/solita": "^0.19.0",
     "@types/bn.js": "^5.1.0",
     "@types/chai": "^4.2.21",

@@ -49,7 +49,7 @@ export const processClockDistributeNftStruct = new beet.BeetArgsStruct<
  * @property [_writable_] fanoutForMintMembershipVoucher
  * @property [] fanoutMint
  * @property [_writable_] fanoutMintMemberTokenAccount
- * @property [] payerTokenAccount
+ * @property [_writable_] payerTokenAccount
  * @category Instructions
  * @category ProcessClockDistributeNft
  * @category generated
@@ -181,7 +181,7 @@ export function createProcessClockDistributeNftInstruction(
     },
     {
       pubkey: accounts.payerTokenAccount,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
   ];
