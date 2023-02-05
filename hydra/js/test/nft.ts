@@ -6,6 +6,7 @@ import {
   Token,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
+
 import { expect, use } from 'chai';
 import ChaiAsPromised from 'chai-as-promised';
 import {
@@ -67,6 +68,7 @@ describe('fanout', async () => {
         });
         const mint = await Token.createMint(
           connection,
+          // @ts-ignore
           authorityWallet,
           authorityWallet.publicKey,
           null,
@@ -276,6 +278,7 @@ describe('fanout', async () => {
 
       const mint = await Token.createMint(
         connection,
+        // @ts-ignore
         authorityWallet,
         authorityWallet.publicKey,
         null,
@@ -290,6 +293,7 @@ describe('fanout', async () => {
       const distBot = new Keypair();
       await connection.requestAirdrop(distBot.publicKey, lamportsNeeded);
       const sent = 112 * 1000000;
+      // @ts-ignore
       await mint.mintTo(fanoutForMintAccountData.tokenAccount, authorityWallet, [], sent);
       const member1 = builtFanout.members[0];
       const member2 = builtFanout.members[1];
@@ -378,6 +382,7 @@ describe('fanout', async () => {
         (await connection.getTokenAccountBalance(fanoutMintMember1TokenAccount)).value.amount,
       ).to.equal(`${sent * 0.2}`);
       const sent2 = 113 * 1000000;
+      // @ts-ignore
       await mint.mintTo(fanoutForMintAccountData.tokenAccount, authorityWallet, [], sent2);
       const member3 = builtFanout.members[2];
       const distMember3 = await fanoutSdk.distributeNftMemberInstructions({

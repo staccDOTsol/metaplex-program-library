@@ -51,6 +51,7 @@ describe('fanout', async () => {
       });
       const mint = await Token.createMint(
         connection,
+         // @ts-ignore
         authorityWallet,
         authorityWallet.publicKey,
         null,

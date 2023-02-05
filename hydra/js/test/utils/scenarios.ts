@@ -61,6 +61,7 @@ export async function builtTokenFanout(
     const memberWallet = new Keypair();
     await fanoutSdk.connection.requestAirdrop(memberWallet.publicKey, 10000000000);
     const ata = await mint.createAssociatedTokenAccount(memberWallet.publicKey);
+    // @ts-ignore
     await mint.mintTo(ata, mintAuth, [], memberNumber);
     const ix = await fanoutSdk.stakeTokenMemberInstructions({
       shares: memberNumber,
@@ -164,6 +165,7 @@ export async function builtNftFanout(
       sellerFeeBasisPoints: 1000,
     });
 
+         // @ts-ignore
     const token = new Token(fanoutSdk.connection, nft.mint.address, TOKEN_PROGRAM_ID, memberWallet);
     const tokenAccount = await token.getOrCreateAssociatedAccountInfo(memberWallet.publicKey);
     const owner = await token.getOrCreateAssociatedAccountInfo(fanoutSdk.wallet.publicKey);
