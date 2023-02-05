@@ -21,8 +21,9 @@ default = []
 [dependencies]
 anchor-lang = "0.24.2"
 anchor-spl = "0.24.2"
-spl-token = {version="3.2.0", features = [ "no-entrypoint" ]}
+spl-token-2022 = { features = [ "no-entrypoint" ]}
 mpl-token-metadata = {version="1.2.7", features = [ "no-entrypoint" ]}
+whirlpools = { features = ["cpi", "no-entrypoint"] }
 
 [profile.release]
 overflow-checks = true     # Enable integer overflow checks.
