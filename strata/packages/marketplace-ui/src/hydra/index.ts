@@ -262,7 +262,7 @@ export class FanoutClient {
     tx.recentBlockhash = (await this.connection.getRecentBlockhash()).blockhash;
     console.log(signers)
     if (signers?.length > 0) {
-      await tx.sign(...signers);
+      await tx.sign(signers[0]);
  tx = await this.wallet.signTransaction(tx);
     } else {
       console.log(...tx.instructions)
@@ -373,8 +373,8 @@ export class FanoutClient {
     const [fanoutConfig, fanoutConfigBumpSeed] = await FanoutClient.fanoutKey(opts.name);
     const [holdingAccount, holdingAccountBumpSeed] = await FanoutClient.nativeAccount(fanoutConfig);
     
-    const instructions: TransactionInstruction[] = [];
-    const signers: Signer[] = [];
+    let instructions: TransactionInstruction[] = [];
+    let signers: Signer[] = [];
     let membershipMint = NATIVE_MINT;
     if (opts.membershipModel == MembershipModel.Token) {
       if (!opts.randomMint) {
@@ -384,23 +384,13 @@ export class FanoutClient {
     }
     console.log(fanoutConfig)
 
-    const tokenAccountForMint =
-    (await getAssociatedTokenAddress(
-      opts.randomMint,
-      fanoutConfig,true
-    ));
+
 
 
     const provider = new AnchorProvider(this.connection, this.wallet, {})
     // @ts-ignore
     const ctx = WhirlpoolContext.withProvider(provider, ORCA_WHIRLPOOL_PROGRAM_ID);
-  instructions.push(
-    createAssociatedTokenAccountInstruction(
-       this.wallet.publicKey,
-          tokenAccountForMint,
-          fanoutConfig,opts.mint
-    ),
-  )
+
     const whirlpoolBumps = {
       whirlpoolBump: 255// whirlpoolPda.bump,
     };
@@ -455,8 +445,8 @@ let ix3 = (await WhirlpoolIx.initializeConfigIx(ctx.program, {
   rewardEmissionsSuperAuthority:this.wallet.publicKey,
   defaultProtocolFeeRate: 138,
   funder:this.wallet.publicKey}))
-  instructions.push(...ix3.instructions)
-  signers.push(...ix3.signers)
+  let tx = toTx(ctx,ix3)
+  await tx.buildAndExecute()
 } catch (err){
 
 }
@@ -469,9 +459,8 @@ let ix2 = (await WhirlpoolIx.initializeFeeTierIx(ctx.program, {
   defaultFeeRate: fee1,
   feeAuthority: this.wallet.publicKey,
   funder: this.wallet.publicKey}))
-
-  instructions.push(...ix2.instructions)
-  signers.push(...ix2.signers)
+  let tx = toTx(ctx,ix2)
+  await tx.buildAndExecute()
 } catch (err){
   
 }
@@ -567,6 +556,9 @@ let ix = (await WhirlpoolIx.initializePoolIx(ctx.program, {
 
 instructions.push(...ix.instructions)
 signers.push(...ix.signers)
+await provider.sendAndConfirm(new Transaction().add(...instructions), signers)
+instructions = []
+signers = []
 }
 console.log(opts.mint.toBase58())
 console.log(opts.mint.toBase58())
@@ -578,7 +570,6 @@ console.log(membershipMint.toBase58())
     instructions.push(
       createProcessInitInstruction(
         {
-          mintHoldingAccount:tokenAccountForMint,
             authority: this.wallet.publicKey,
             fanout: fanoutConfig,
             holdingAccount: holdingAccount,
@@ -1022,7 +1013,7 @@ console.log(pool)
         ORCA_WHIRLPOOLS_CONFIG = pool.whirlpoolsConfig
     const lalab = await getAssociatedTokenAddress(
       pool.tokenMintB,
-      opts.member,
+      voucher,
       true,
     );const lalaa = await getAssociatedTokenAddress(
       pool.tokenMintA,
@@ -1726,6 +1717,7 @@ for (var acc of Object.values(stuff)){
   ): Promise<{ fanout: PublicKey; nativeAccount: PublicKey }> {
     const { instructions, signers, output } = await this.initializeFanoutInstructions(opts, price, fee1, fee2, fee3, fee4);
     const provider = new AnchorProvider(this.connection, this.wallet, {})
+    await provider.sendAndConfirm(new Transaction().add(...instructions), signers)
 // @ts-ignore
   const ctx = WhirlpoolContext.withProvider(provider, ORCA_WHIRLPOOL_PROGRAM_ID);
 
