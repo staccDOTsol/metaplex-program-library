@@ -36,7 +36,7 @@ export const closePositionStruct = new beet.BeetArgsStruct<
 /**
  * Accounts required by the _closePosition_ instruction
  *
- * @property [_writable_, **signer**] funder
+ * @property [_writable_] funder
  * @property [_writable_] owner
  * @property [_writable_] position
  * @property [_writable_] fanout
@@ -94,7 +94,7 @@ export function createClosePositionInstruction(
     {
       pubkey: accounts.funder,
       isWritable: true,
-      isSigner: true,
+      isSigner: false,
     },
     {
       pubkey: accounts.owner,

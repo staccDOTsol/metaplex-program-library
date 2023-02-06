@@ -40,7 +40,7 @@ export const increaseLiquidityStruct = new beet.BeetArgsStruct<
 /**
  * Accounts required by the _increaseLiquidity_ instruction
  *
- * @property [_writable_, **signer**] funder
+ * @property [_writable_] funder
  * @property [_writable_] owner
  * @property [_writable_] fanout
  * @property [_writable_] position
@@ -106,7 +106,7 @@ export function createIncreaseLiquidityInstruction(
     {
       pubkey: accounts.funder,
       isWritable: true,
-      isSigner: true,
+      isSigner: false,
     },
     {
       pubkey: accounts.owner,

@@ -497,7 +497,7 @@
         {
           "name": "funder",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "owner",
@@ -607,7 +607,7 @@
         {
           "name": "funder",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "owner",
@@ -716,7 +716,7 @@
         {
           "name": "funder",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "owner",
@@ -782,7 +782,7 @@
         {
           "name": "funder",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "owner",
@@ -858,7 +858,7 @@
         {
           "name": "funder",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "owner",
@@ -1004,7 +1004,7 @@
         {
           "name": "funder",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "owner",

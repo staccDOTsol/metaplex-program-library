@@ -23,7 +23,7 @@ export const yummyFeesStruct = new beet.BeetArgsStruct<{
 /**
  * Accounts required by the _yummyFees_ instruction
  *
- * @property [_writable_, **signer**] funder
+ * @property [_writable_] funder
  * @property [_writable_] owner
  * @property [_writable_] position
  * @property [_writable_] positionMint
@@ -79,7 +79,7 @@ export function createYummyFeesInstruction(
     {
       pubkey: accounts.funder,
       isWritable: true,
-      isSigner: true,
+      isSigner: false,
     },
     {
       pubkey: accounts.owner,
