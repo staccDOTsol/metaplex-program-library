@@ -4,6 +4,7 @@ url = "https://anchor.projectserum.com"
 [provider]
 cluster = "devnet"
 wallet = "~/g3s.json"
+url = "https://rpc-devnet.helius.xyz/?api-key=8913a285-a5ef-4c35-8d80-03fb276eff2f"
 
 [programs.localnet]
 auction_house="hausS13jsjafwWwGqZTUQRmWyvyxn9EQpqMwV1PBBmk"

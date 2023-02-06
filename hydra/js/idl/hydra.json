@@ -16,6 +16,11 @@
           "isSigner": false
         },
         {
+          "name": "mintHoldingAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "holdingAccount",
           "isMut": true,
           "isSigner": false
@@ -455,37 +460,6 @@
         {
           "name": "instructions",
           "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "processRemoveMember",
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "member",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "fanout",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "membershipAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "destination",
-          "isMut": true,
           "isSigner": false
         }
       ],
@@ -1049,6 +1023,11 @@
         },
         {
           "name": "position",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "fanout",
           "isMut": true,
           "isSigner": false
         },
@@ -1629,7 +1608,7 @@
     }
   ],
   "metadata": {
-    "address": "4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6",
+    "address": "5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7",
     "origin": "anchor",
     "binaryVersion": "0.24.2",
     "libVersion": "0.24.2"

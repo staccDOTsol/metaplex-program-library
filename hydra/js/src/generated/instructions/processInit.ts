@@ -51,6 +51,7 @@ export const processInitStruct = new beet.FixableBeetArgsStruct<
  *
  * @property [_writable_, **signer**] authority
  * @property [_writable_] fanout
+ * @property [_writable_] mintHoldingAccount
  * @property [_writable_] holdingAccount
  * @property [_writable_] membershipMint
  * @category Instructions
@@ -60,6 +61,7 @@ export const processInitStruct = new beet.FixableBeetArgsStruct<
 export type ProcessInitInstructionAccounts = {
   authority: web3.PublicKey;
   fanout: web3.PublicKey;
+  mintHoldingAccount: web3.PublicKey;
   holdingAccount: web3.PublicKey;
   systemProgram?: web3.PublicKey;
   membershipMint: web3.PublicKey;
@@ -83,7 +85,7 @@ export const processInitInstructionDiscriminator = [172, 5, 165, 143, 86, 159, 5
 export function createProcessInitInstruction(
   accounts: ProcessInitInstructionAccounts,
   args: ProcessInitInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
 ) {
   const [data] = processInitStruct.serialize({
     instructionDiscriminator: processInitInstructionDiscriminator,
@@ -97,6 +99,11 @@ export function createProcessInitInstruction(
     },
     {
       pubkey: accounts.fanout,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.mintHoldingAccount,
       isWritable: true,
       isSigner: false,
     },

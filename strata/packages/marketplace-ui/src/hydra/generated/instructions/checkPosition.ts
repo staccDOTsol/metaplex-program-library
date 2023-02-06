@@ -66,7 +66,7 @@ export const checkPositionInstructionDiscriminator = [208, 242, 101, 15, 55, 242
 export function createCheckPositionInstruction(
   accounts: CheckPositionInstructionAccounts,
   args: CheckPositionInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
 ) {
   const [data] = checkPositionStruct.serialize({
     instructionDiscriminator: checkPositionInstructionDiscriminator,

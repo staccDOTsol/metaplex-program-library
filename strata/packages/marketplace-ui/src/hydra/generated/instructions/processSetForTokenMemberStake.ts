@@ -77,7 +77,7 @@ export const processSetForTokenMemberStakeInstructionDiscriminator = [
 export function createProcessSetForTokenMemberStakeInstruction(
   accounts: ProcessSetForTokenMemberStakeInstructionAccounts,
   args: ProcessSetForTokenMemberStakeInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
 ) {
   const [data] = processSetForTokenMemberStakeStruct.serialize({
     instructionDiscriminator: processSetForTokenMemberStakeInstructionDiscriminator,

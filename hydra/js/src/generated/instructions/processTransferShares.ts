@@ -70,7 +70,7 @@ export const processTransferSharesInstructionDiscriminator = [195, 175, 36, 50, 
 export function createProcessTransferSharesInstruction(
   accounts: ProcessTransferSharesInstructionAccounts,
   args: ProcessTransferSharesInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
 ) {
   const [data] = processTransferSharesStruct.serialize({
     instructionDiscriminator: processTransferSharesInstructionDiscriminator,

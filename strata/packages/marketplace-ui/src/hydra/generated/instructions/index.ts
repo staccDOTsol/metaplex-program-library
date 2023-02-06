@@ -6,7 +6,6 @@ export * from './openPosition';
 export * from './processDistributeToken';
 export * from './processInit';
 export * from './processInitForMint';
-export * from './processRemoveMember';
 export * from './processSetForTokenMemberStake';
 export * from './processSetTokenMemberStake';
 export * from './processSignMetadata';

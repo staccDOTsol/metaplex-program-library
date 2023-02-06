@@ -91,7 +91,7 @@ export class FanoutMembershipVoucher implements FanoutMembershipVoucherArgs {
    * @param programId - the program that owns the accounts we are filtering
    */
   static gpaBuilder(
-    programId: web3.PublicKey = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+    programId: web3.PublicKey = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
   ) {
     return beetSolana.GpaBuilder.fromStruct(programId, fanoutMembershipVoucherBeet);
   }

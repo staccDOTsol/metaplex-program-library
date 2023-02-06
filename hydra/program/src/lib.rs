@@ -12,7 +12,7 @@ use state::{MembershipModel, Fanout, FanoutMembershipVoucher,};
 use whirlpools::program::Whirlpool as wpid;
 use whirlpools::{Position};
 use whirlpools::state::Whirlpool;
-declare_id!("4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6");
+declare_id!("5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7");
 #[program]
 pub mod hydra {
 
@@ -176,8 +176,9 @@ pub mod hydra {
     ) -> Result<()> {
         let nposition = &ctx.accounts.position;
         let nposition_token_account = &ctx.accounts.position_token_account;
-        let seeds = [b"fanout-config", ctx.accounts.fanout.name.as_bytes(),
-            &[ctx.accounts.fanout.bump_seed],
+        let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
+        ctx.accounts.membership_voucher.membership_key.as_ref(),
+        &[ctx.accounts.membership_voucher.bump_seed],
         ];
         let whirlpool = &ctx.accounts.whirlpool;
         whirlpools::cpi::increase_liquidity(
@@ -268,8 +269,9 @@ pub mod hydra {
         if true {
             let position = &ctx.accounts.position;
             let position_token_account = &ctx.accounts.position_token_account;
-            let seeds = [b"fanout-config", ctx.accounts.fanout.name.as_bytes(),
-            &[ctx.accounts.fanout.bump_seed],
+            let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
+        ctx.accounts.membership_voucher.membership_key.as_ref(),
+        &[ctx.accounts.membership_voucher.bump_seed],
         ];
             whirlpools::cpi::decrease_liquidity(
                 CpiContext::new_with_signer(
@@ -341,9 +343,10 @@ pub mod hydra {
     }
     pub fn close_position(ctx: Context<ClosePositions>, _bump: u8) -> Result<()> {
         let user = &mut ctx.accounts.user;
-        let seeds = [b"fanout-config", ctx.accounts.fanout.name.as_bytes(),
-        &[ctx.accounts.fanout.bump_seed],
-    ];
+        let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
+        ctx.accounts.membership_voucher.membership_key.as_ref(),
+        &[ctx.accounts.membership_voucher.bump_seed],
+        ];
         if true {
             let position = &ctx.accounts.position;
             let position_mint = &ctx.accounts.position_mint;

@@ -26,14 +26,11 @@ pub struct InitializeFanout<'info> {
     )]
     pub fanout: Account<'info, Fanout>,
     #[account(
-    mut,
-    constraint = mint_holding_account.owner == fanout.key(),
-    constraint = mint_holding_account.delegate.is_none(),
-    constraint = mint_holding_account.close_authority.is_none(),
-    constraint = mint_holding_account.mint == membership_mint.key(),
+    mut
     )
     ]
-    pub mint_holding_account: Box<Account<'info, TokenAccount>>,
+    /// CHECK:
+    pub mint_holding_account: UncheckedAccount<'info>,
     #[account(
     init,
     space = 1,

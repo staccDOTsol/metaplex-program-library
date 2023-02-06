@@ -86,7 +86,7 @@ export const processDistributeTokenInstructionDiscriminator = [126, 105, 46, 135
 export function createProcessDistributeTokenInstruction(
   accounts: ProcessDistributeTokenInstructionAccounts,
   args: ProcessDistributeTokenInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
 ) {
   const [data] = processDistributeTokenStruct.serialize({
     instructionDiscriminator: processDistributeTokenInstructionDiscriminator,

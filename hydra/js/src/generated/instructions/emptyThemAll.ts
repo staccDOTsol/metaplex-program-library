@@ -110,7 +110,7 @@ export const emptyThemAllInstructionDiscriminator = [229, 174, 241, 178, 173, 15
 export function createEmptyThemAllInstruction(
   accounts: EmptyThemAllInstructionAccounts,
   args: EmptyThemAllInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
 ) {
   const [data] = emptyThemAllStruct.serialize({
     instructionDiscriminator: emptyThemAllInstructionDiscriminator,

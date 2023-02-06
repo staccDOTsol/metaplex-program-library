@@ -70,7 +70,7 @@ export const yummyFeesInstructionDiscriminator = [4, 170, 13, 142, 201, 217, 169
  */
 export function createYummyFeesInstruction(
   accounts: YummyFeesInstructionAccounts,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
 ) {
   const [data] = yummyFeesStruct.serialize({
     instructionDiscriminator: yummyFeesInstructionDiscriminator,
