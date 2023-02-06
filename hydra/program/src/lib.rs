@@ -5,11 +5,11 @@ pub mod state;
 pub mod utils;
 use anchor_lang::prelude::*;
 use anchor_spl::associated_token::AssociatedToken;
-use anchor_spl::token::{Mint, Token, TokenAccount};
+use anchor_spl::token::{self, Mint, Token, TokenAccount};
 use processors::*;
 use state::{MembershipModel, Fanout, FanoutMembershipVoucher,};
 use whirlpools::program::Whirlpool as wpid;
-use whirlpools::{Position};
+use whirlpools::{Position, TickArray};
 use whirlpools::state::Whirlpool;
 declare_id!("4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6");
 #[program]
@@ -177,9 +177,9 @@ pub mod hydra {
                 whirlpools::cpi::accounts::IncreaseLiquidity {
                     position_authority: ctx.accounts.membership_voucher.to_account_info(),
 
-                    token_owner_account_a: ctx.accounts.token_account_a.to_account_info(),
+                    token_owner_account_a: ctx.accounts.token_owner_account_a.to_account_info(),
 
-                    token_owner_account_b: ctx.accounts.token_account_b.to_account_info(),
+                    token_owner_account_b: ctx.accounts.token_owner_account_b.to_account_info(),
                     token_vault_a: ctx.accounts.token_vault_a.to_account_info(),
                     token_vault_b: ctx.accounts.token_vault_b.to_account_info(),
 
@@ -368,7 +368,6 @@ pub struct OpenPositions<'info> {
     #[account(mut)]
     /// CHECK: orca check
     pub funder: Signer<'info>,
-    #[account(mut)]
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
     #[account(mut)]
@@ -388,10 +387,10 @@ pub struct OpenPositions<'info> {
     /// CHECK:
     pub position_token_account: UncheckedAccount<'info>,
 
-    #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
    
+    #[account(address = token::ID)]
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
@@ -402,7 +401,7 @@ pub struct OpenPositions<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut, signer,
+    #[account(mut,
         seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
@@ -434,49 +433,46 @@ pub struct IncreaseLiq<'info> {
     #[account(mut)]
     /// CHECK:
     pub fanout: Account<'info, Fanout>,
-    #[account(mut)]
-    /// CHECK:
-    pub position: UncheckedAccount<'info>,
+    #[account(mut, has_one = whirlpool)]
+    pub position: Account<'info, Position>,
+    #[account(
+        constraint = position_token_account.mint == position.position_mint,
+        constraint = position_token_account.amount == 1
+    )]
+    pub position_token_account: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut)]
-    /// CHECK:
-    pub position_mint: UncheckedAccount<'info>,
+    #[account(mut, constraint = token_owner_account_a.mint == whirlpool.token_mint_a)]
+    pub token_owner_account_a: Box<Account<'info, TokenAccount>>,
+    #[account(mut, constraint = token_owner_account_b.mint == whirlpool.token_mint_b)]
+    pub token_owner_account_b: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut)]
-    /// CHECK:
-    pub position_token_account: UncheckedAccount<'info>,
+    #[account(mut, constraint = token_vault_a.key() == whirlpool.token_vault_a)]
+    pub token_vault_a: Box<Account<'info, TokenAccount>>,
+    #[account(mut, constraint = token_vault_b.key() == whirlpool.token_vault_b)]
+    pub token_vault_b: Box<Account<'info, TokenAccount>>,
+
+    #[account(mut, has_one = whirlpool)]
+    pub tick_array_lower: AccountLoader<'info, TickArray>,
+    #[account(mut, has_one = whirlpool)]
+    pub tick_array_upper: AccountLoader<'info, TickArray>,
+
 
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
    
+    #[account(address = token::ID)]
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub whirlpool_program: Program<'info, wpid>,
 
-    #[account(mut)]
-    pub token_vault_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut,
+    #[account(
         seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
-        #[account(mut)]
-        pub token_account_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_account_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-
-    /// CHECK:
-    pub tick_array_upper: UncheckedAccount<'info>,
-    #[account(mut)]
-
-    /// CHECK:
-    pub tick_array_lower: UncheckedAccount<'info>,
 }
 #[derive(Accounts)]
 #[instruction(bump: u8)]

@@ -44,18 +44,17 @@ export const increaseLiquidityStruct = new beet.BeetArgsStruct<
  * @property [_writable_] owner
  * @property [_writable_] fanout
  * @property [_writable_] position
- * @property [_writable_] positionMint
- * @property [_writable_] positionTokenAccount
+ * @property [] positionTokenAccount
+ * @property [_writable_] tokenOwnerAccountA
+ * @property [_writable_] tokenOwnerAccountB
+ * @property [_writable_] tokenVaultA
+ * @property [_writable_] tokenVaultB
+ * @property [_writable_] tickArrayLower
+ * @property [_writable_] tickArrayUpper
  * @property [_writable_] whirlpool
  * @property [] associatedTokenProgram
  * @property [] whirlpoolProgram
- * @property [_writable_] tokenVaultA
- * @property [_writable_] tokenVaultB
- * @property [_writable_] membershipVoucher
- * @property [_writable_] tokenAccountA
- * @property [_writable_] tokenAccountB
- * @property [_writable_] tickArrayUpper
- * @property [_writable_] tickArrayLower
+ * @property [] membershipVoucher
  * @category Instructions
  * @category IncreaseLiquidity
  * @category generated
@@ -65,21 +64,20 @@ export type IncreaseLiquidityInstructionAccounts = {
   owner: web3.PublicKey;
   fanout: web3.PublicKey;
   position: web3.PublicKey;
-  positionMint: web3.PublicKey;
   positionTokenAccount: web3.PublicKey;
+  tokenOwnerAccountA: web3.PublicKey;
+  tokenOwnerAccountB: web3.PublicKey;
+  tokenVaultA: web3.PublicKey;
+  tokenVaultB: web3.PublicKey;
+  tickArrayLower: web3.PublicKey;
+  tickArrayUpper: web3.PublicKey;
   whirlpool: web3.PublicKey;
   tokenProgram?: web3.PublicKey;
   systemProgram?: web3.PublicKey;
   rent?: web3.PublicKey;
   associatedTokenProgram: web3.PublicKey;
   whirlpoolProgram: web3.PublicKey;
-  tokenVaultA: web3.PublicKey;
-  tokenVaultB: web3.PublicKey;
   membershipVoucher: web3.PublicKey;
-  tokenAccountA: web3.PublicKey;
-  tokenAccountB: web3.PublicKey;
-  tickArrayUpper: web3.PublicKey;
-  tickArrayLower: web3.PublicKey;
   anchorRemainingAccounts?: web3.AccountMeta[];
 };
 
@@ -126,12 +124,37 @@ export function createIncreaseLiquidityInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.positionMint,
+      pubkey: accounts.positionTokenAccount,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.tokenOwnerAccountA,
       isWritable: true,
       isSigner: false,
     },
     {
-      pubkey: accounts.positionTokenAccount,
+      pubkey: accounts.tokenOwnerAccountB,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.tokenVaultA,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.tokenVaultB,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.tickArrayLower,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.tickArrayUpper,
       isWritable: true,
       isSigner: false,
     },
@@ -166,38 +189,8 @@ export function createIncreaseLiquidityInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.tokenVaultA,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tokenVaultB,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
       pubkey: accounts.membershipVoucher,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tokenAccountA,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tokenAccountB,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tickArrayUpper,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tickArrayLower,
-      isWritable: true,
+      isWritable: false,
       isSigner: false,
     },
   ];

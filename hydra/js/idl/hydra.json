@@ -501,7 +501,7 @@
         },
         {
           "name": "owner",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -526,7 +526,7 @@
         },
         {
           "name": "whirlpool",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -625,12 +625,37 @@
           "isSigner": false
         },
         {
-          "name": "positionMint",
+          "name": "positionTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenOwnerAccountA",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "positionTokenAccount",
+          "name": "tokenOwnerAccountB",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenVaultA",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenVaultB",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tickArrayLower",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tickArrayUpper",
           "isMut": true,
           "isSigner": false
         },
@@ -665,38 +690,8 @@
           "isSigner": false
         },
         {
-          "name": "tokenVaultA",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenVaultB",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "membershipVoucher",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccountA",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccountB",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tickArrayUpper",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tickArrayLower",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         }
       ],
