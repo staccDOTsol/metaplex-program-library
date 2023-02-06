@@ -26,12 +26,6 @@ pub struct InitializeFanout<'info> {
     )]
     pub fanout: Account<'info, Fanout>,
     #[account(
-    mut
-    )
-    ]
-    /// CHECK:
-    pub mint_holding_account: UncheckedAccount<'info>,
-    #[account(
     init,
     space = 1,
     seeds = [b"fanout-native-account", fanout.key().as_ref()],

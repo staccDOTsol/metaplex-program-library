@@ -129,9 +129,12 @@ pub mod hydra {
             + whirlpool.tick_spacing as i32 * 2;
         msg!(&tick_lower_index.to_string().to_owned());
         msg!(&tick_upper_index.to_string().to_owned());
-
+        let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
+        ctx.accounts.membership_voucher.membership_key.as_ref(),
+        &[ctx.accounts.membership_voucher.bump_seed],
+        ];
         whirlpools::cpi::open_position(
-            CpiContext::new(
+            CpiContext::new_with_signer(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::OpenPosition {
                     associated_token_program: ctx
@@ -147,7 +150,7 @@ pub mod hydra {
                     token_program: ctx.accounts.token_program.to_account_info(),
                     system_program: ctx.accounts.system_program.to_account_info(),
                     rent: ctx.accounts.rent.to_account_info(),
-                },
+                },&[&seeds],
             ),
             whirlpools::OpenPositionBumps {
                 position_bump: bump,

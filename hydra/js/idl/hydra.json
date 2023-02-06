@@ -16,11 +16,6 @@
           "isSigner": false
         },
         {
-          "name": "mintHoldingAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "holdingAccount",
           "isMut": true,
           "isSigner": false
