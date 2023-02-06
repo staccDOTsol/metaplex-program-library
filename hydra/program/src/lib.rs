@@ -402,7 +402,7 @@ pub struct OpenPositions<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut,
+    #[account(mut, signer,
         seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
