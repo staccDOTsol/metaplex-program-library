@@ -367,7 +367,7 @@ pub mod hydra {
 pub struct OpenPositions<'info> {
     #[account(mut)]
     /// CHECK: orca check
-    pub funder: Signer<'info>,
+    pub funder: UncheckedAccount<'info>,
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
     #[account(mut)]
@@ -401,7 +401,7 @@ pub struct OpenPositions<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut,
+    #[account(muut,
         seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
@@ -425,7 +425,7 @@ pub struct OpenPositions<'info> {
 pub struct IncreaseLiq<'info> {
     #[account(mut)]
     /// CHECK: orca check
-    pub funder: Signer<'info>,
+    pub funder: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
@@ -479,7 +479,7 @@ pub struct IncreaseLiq<'info> {
 pub struct OpenPositionsHehe<'info> {
     #[account(mut)]
     /// CHECK: orca check
-    pub funder: Signer<'info>,
+    pub funder: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
@@ -533,7 +533,7 @@ pub struct OpenPositionsHehe<'info> {
 pub struct ClosePositions<'info> {
     #[account(mut)]
     /// CHECK: orca check
-    pub funder: Signer<'info>,
+    pub funder: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
@@ -578,7 +578,7 @@ pub struct ClosePositions<'info> {
 pub struct EmptyThemAll<'info> {
     #[account(mut)]
     /// CHECK: orca check
-    pub funder: Signer<'info>,
+    pub funder: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
@@ -666,7 +666,7 @@ pub struct EmptyThemAll<'info> {
 pub struct Rewardies<'info> {
     #[account(mut)]
     /// CHECK: orca check
-    pub funder: Signer<'info>,
+    pub funder: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
@@ -704,7 +704,7 @@ pub struct Rewardies<'info> {
 pub struct YummyFees<'info> {
     #[account(mut)]
     /// CHECK: orca check
-    pub funder: Signer<'info>,
+    pub funder: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
