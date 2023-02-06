@@ -17,6 +17,7 @@ import * as web3 from '@solana/web3.js';
 export type OpenPositionInstructionArgs = {
   bump: number;
   tickSpacing: number;
+  positionBump: number;
 };
 /**
  * @category Instructions
@@ -32,6 +33,7 @@ export const openPositionStruct = new beet.BeetArgsStruct<
     ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
     ['bump', beet.u8],
     ['tickSpacing', beet.i32],
+    ['positionBump', beet.u8],
   ],
   'OpenPositionInstructionArgs',
 );

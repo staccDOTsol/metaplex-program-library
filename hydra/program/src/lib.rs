@@ -102,7 +102,7 @@ pub mod hydra {
         }
         Ok(())
     }
-    pub fn open_position(ctx: Context<OpenPositions>, bump: u8, tick_spacing: i32) -> Result<()> {
+    pub fn open_position(ctx: Context<OpenPositions>, bump: u8, tick_spacing: i32, position_bump: u8) -> Result<()> {
         let whirlpool = &ctx.accounts.whirlpool;
 
         let tick_lower_index = &whirlpool.tick_current_index
@@ -127,7 +127,7 @@ pub mod hydra {
             + whirlpool.tick_spacing as i32 * 2;
         msg!(&tick_lower_index.to_string().to_owned());
         msg!(&tick_upper_index.to_string().to_owned());
-        let seeds = &["fanout-membership".as_bytes(), ctx.accounts.membership_voucher.fanout.as_ref(), 
+        let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
         ctx.accounts.membership_voucher.membership_key.as_ref(),
         &[ctx.accounts.membership_voucher.bump_seed],
         ];
@@ -166,7 +166,7 @@ pub mod hydra {
     ) -> Result<()> {
         let nposition = &ctx.accounts.position;
         let nposition_token_account = &ctx.accounts.position_token_account;
-        let seeds = &["fanout-membership".as_bytes(), ctx.accounts.membership_voucher.fanout.as_ref(), 
+        let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
         ctx.accounts.membership_voucher.membership_key.as_ref(),
         &[ctx.accounts.membership_voucher.bump_seed],
         ];
@@ -259,7 +259,7 @@ pub mod hydra {
         if true {
             let position = &ctx.accounts.position;
             let position_token_account = &ctx.accounts.position_token_account;
-            let seeds = &["fanout-membership".as_bytes(), ctx.accounts.membership_voucher.fanout.as_ref(), 
+            let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
         ctx.accounts.membership_voucher.membership_key.as_ref(),
         &[ctx.accounts.membership_voucher.bump_seed],
         ];
@@ -333,7 +333,7 @@ pub mod hydra {
     }
     pub fn close_position(ctx: Context<ClosePositions>, _bump: u8) -> Result<()> {
         let user = &mut ctx.accounts.user;
-        let seeds = &["fanout-membership".as_bytes(), ctx.accounts.membership_voucher.fanout.as_ref(), 
+        let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
         ctx.accounts.membership_voucher.membership_key.as_ref(),
         &[ctx.accounts.membership_voucher.bump_seed],
         ];
@@ -363,7 +363,7 @@ pub mod hydra {
     }
 }
 #[derive(Accounts)]
-#[instruction(bump: u8)]
+#[instruction(bump: u8, tick_spacing: i32, position_bump: u8)]
 pub struct OpenPositions<'info> {
     #[account(mut)]
     /// CHECK: orca check
@@ -375,9 +375,11 @@ pub struct OpenPositions<'info> {
     pub fanout: Account<'info, Fanout>,
 
 
-    #[account(mut)]
-    /// CHECK:
-    pub position: UncheckedAccount<'info>,
+    #[account(mut,
+        seeds = [b"position".as_ref(), position_mint.key().as_ref()],
+        bump = position_bump,
+      )]
+    pub position: Account<'info, Position>,
 
     #[account(mut)]
     /// CHECK:
