@@ -83,7 +83,7 @@ export const processInitInstructionDiscriminator = [172, 5, 165, 143, 86, 159, 5
 export function createProcessInitInstruction(
   accounts: ProcessInitInstructionAccounts,
   args: ProcessInitInstructionArgs,
-  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
+  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
 ) {
   const [data] = processInitStruct.serialize({
     instructionDiscriminator: processInitInstructionDiscriminator,

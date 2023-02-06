@@ -11,7 +11,7 @@ use state::{MembershipModel, Fanout, FanoutMembershipVoucher,};
 use whirlpools::program::Whirlpool as wpid;
 use whirlpools::{Position};
 use whirlpools::state::Whirlpool;
-declare_id!("5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7");
+declare_id!("4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6");
 #[program]
 pub mod hydra {
 
