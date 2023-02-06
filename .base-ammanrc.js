@@ -27,13 +27,23 @@ const programs = {
   },
   hydra: {
     label: 'Hydra',
-    programId: 'hyDQ4Nz1eYyegS6JfenyKwKzYxRsCWCriYSAjtzP4Vg',
+    programId: 'B9epCa7ZozSMAN2dSnLTfV32exgGnfrEu3M8NJTeTZ9j',
     deployPath: localDeployPath('mpl_hydra'),
+  },
+  whirlpool: {
+    label: 'Whirlpool',
+    programId: 'whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc',
+    deployPath: localDeployPath('whirlpool'),
   },
   candy_machine_core: {
     label: 'Candy Machine Core',
     programId: 'CndyV3LdqHUfDLmE5naZjVN8rBZz4tqhdefbAnjHG3JR',
     deployPath: localDeployPath('mpl_candy_machine_core'),
+  },
+  token22: {
+    label: 'Token 2022',
+    programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+    deployPath: localDeployPath('Token'),
   },
   token_auth_rules: {
     label: 'Token Auth Rules',

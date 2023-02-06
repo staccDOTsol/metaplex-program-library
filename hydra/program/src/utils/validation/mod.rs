@@ -1,4 +1,6 @@
 use crate::error::HydraError;
+use anchor_spl::token::Token;
+use mpl_token_metadata::state::TokenMetadataAccount;
 use crate::state::{Fanout, MembershipModel};
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::instruction::Instruction;
@@ -73,9 +75,9 @@ pub fn assert_holding(
     token_account: &Account<TokenAccount>,
     mint_info: &AccountInfo,
 ) -> Result<()> {
-    assert_owned_by(mint_info, &spl_token_2022::id())?;
+    assert_owned_by(mint_info, &Token::id())?;
     let token_account_info = token_account.to_account_info();
-    assert_owned_by(&token_account_info, &spl_token_2022::id())?;
+    assert_owned_by(&token_account_info, &Token::id())?;
     if !cmp_pubkeys(&token_account.owner, owner.key) {
         return Err(HydraError::IncorrectOwner.into());
     }

@@ -286,7 +286,7 @@ pub mod token_entangler {
             &[&signer_seeds],
         )?;
 
-        let is_native = treasury_mint.key() == spl_token::native_mint::id();
+        let is_native = treasury_mint.key() == spl_native_mint::id();
 
         if !entangled_pair.paid || entangled_pair.pays_every_time {
             pay_creator_fees(

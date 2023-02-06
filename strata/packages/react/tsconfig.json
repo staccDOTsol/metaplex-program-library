@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.root.json",
+  "references": [
+    {
+      "path": "../accelerator"
+    },
+    {
+      "path": "../fungible-entangler"
+    },
+    {
+      "path": "../spl-token-bonding"
+    },
+    {
+      "path": "../spl-token-collective"
+    },
+    {
+      "path": "../spl-utils"
+    },
+    {
+      "path": "./tsconfig.cjs.json"
+    },
+    {
+      "path": "./tsconfig.esm.json"
+    }
+  ]
+}

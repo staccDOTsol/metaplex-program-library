@@ -629,7 +629,7 @@ pub fn bid_logic<'info>(
         &seeds,
     )?;
 
-    let is_native = treasury_mint.key() == spl_token::native_mint::id();
+    let is_native = treasury_mint.key() == spl_native_mint::id();
 
     let auction_house_key = auction_house.key();
     let wallet_key = wallet.key();
@@ -831,7 +831,7 @@ pub fn auctioneer_bid_logic<'info>(
         &seeds,
     )?;
 
-    let is_native = treasury_mint.key() == spl_token::native_mint::id();
+    let is_native = treasury_mint.key() == spl_native_mint::id();
 
     let auction_house_key = auction_house.key();
     let wallet_key = wallet.key();

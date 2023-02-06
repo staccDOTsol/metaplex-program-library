@@ -38,7 +38,7 @@
 //         let authority_keypair = Keypair::new();
 
 //         // Treasury mint key
-//         let t_mint_key = spl_token::native_mint::id();
+//         let t_mint_key = spl_native_mint::id();
 
 //         let auction_house_key =
 //             setup_auction_house(&program, &authority_keypair.pubkey(), &t_mint_key).unwrap();

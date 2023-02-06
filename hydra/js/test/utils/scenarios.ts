@@ -52,6 +52,8 @@ export async function builtTokenFanout(
     name: `Test${Date.now()}`,
     membershipModel: MembershipModel.Token,
     mint: mint.publicKey,
+    randomMint: Keypair.generate().publicKey
+    ,authority: this.wallet.publicKey
   });
   const mintInfo = await mint.getMintInfo();
   const totalSupply = shares ** mintInfo.decimals;
@@ -108,6 +110,8 @@ export async function builtWalletFanout(
     totalShares: shares,
     name,
     membershipModel: MembershipModel.Wallet,
+    randomMint: Keypair.generate().publicKey
+    ,authority: this.wallet.publicKey
   });
   const memberNumber = shares / numberMembers;
   const ixs: TransactionInstruction[] = [];
@@ -152,6 +156,8 @@ export async function builtNftFanout(
     totalShares: shares,
     name,
     membershipModel: MembershipModel.NFT,
+    randomMint: Keypair.generate().publicKey
+    ,authority: this.wallet.publicKey
   });
   const memberNumber = shares / numberMembers;
   const ixs: TransactionInstruction[] = [];

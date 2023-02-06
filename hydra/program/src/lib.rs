@@ -1,49 +1,47 @@
 pub mod error;
 pub mod processors;
+use anchor_spl::token::approve;
+
 pub mod state;
 pub mod utils;
 use anchor_lang::prelude::*;
-use anchor_lang::prelude::*;
 use anchor_spl::associated_token::AssociatedToken;
-use anchor_spl::token::{self, Mint, Token, TokenAccount};
-use borsh::BorshSchema;
+use anchor_spl::token::{Mint, Token, TokenAccount};
 use processors::*;
-use state::MembershipModel;
+use state::{MembershipModel, Fanout, FanoutMembershipVoucher,};
 use whirlpools::program::Whirlpool as wpid;
-use whirlpools::{Position, Whirlpool};
-
-declare_id!("hyDQ4Nz1eYyegS6JfenyKwKzYxRsCWCriYSAjtzP4Vg");
+use whirlpools::{Position};
+use whirlpools::state::Whirlpool;
+declare_id!("4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6");
 #[program]
 pub mod hydra {
+
+    use anchor_spl::token::Approve;
+
     use super::*;
 
     pub fn process_init(
         ctx: Context<InitializeFanout>,
         args: InitializeFanoutArgs,
         model: MembershipModel,
+        whirlpool: Pubkey,
+         whirlpool2: Pubkey,
+         whirlpool3: Pubkey,
+         whirlpool4: Pubkey,
+                                       // 
     ) -> Result<()> {
-        init(ctx, args, model)
+        init(ctx, args, model, whirlpool,whirlpool2,whirlpool3,whirlpool4)
     }
 
     pub fn process_init_for_mint(
         ctx: Context<InitializeFanoutForMint>,
         bump_seed: u8,
+        whirlpool: Pubkey,
+        whirlpool2: Pubkey,
+        whirlpool3: Pubkey,
+        whirlpool4: Pubkey,
     ) -> Result<()> {
-        init_for_mint(ctx, bump_seed)
-    }
-
-    pub fn process_add_member_wallet(
-        ctx: Context<AddMemberWallet>,
-        args: AddMemberArgs,
-    ) -> Result<()> {
-        add_member_wallet(ctx, args)
-    }
-
-    pub fn process_add_member_nft(
-        ctx: Context<AddMemberWithNFT>,
-        args: AddMemberArgs,
-    ) -> Result<()> {
-        add_member_nft(ctx, args)
+        init_for_mint(ctx, bump_seed, whirlpool,whirlpool2,whirlpool3,whirlpool4)
     }
 
     pub fn process_set_token_member_stake(
@@ -58,20 +56,6 @@ pub mod hydra {
         shares: u64,
     ) -> Result<()> {
         set_for_token_member_stake(ctx, shares)
-    }
-
-    pub fn process_distribute_nft(
-        ctx: Context<DistributeNftMember>,
-        distribute_for_mint: bool,
-    ) -> Result<()> {
-        distribute_for_nft(ctx, distribute_for_mint)
-    }
-
-    pub fn process_distribute_wallet(
-        ctx: Context<DistributeWalletMember>,
-        distribute_for_mint: bool,
-    ) -> Result<()> {
-        distribute_for_wallet(ctx, distribute_for_mint)
     }
 
     pub fn process_distribute_token(
@@ -93,9 +77,6 @@ pub mod hydra {
         unstake(ctx)
     }
 
-    pub fn process_remove_member(ctx: Context<RemoveMember>) -> Result<()> {
-        remove_member(ctx)
-    }
     pub fn check_position(ctx: Context<CheckPosition>, tick_spacing: i32) -> Result<()> {
         let whirlpool = &ctx.accounts.whirlpool;
         let position = &ctx.accounts.position;
@@ -158,7 +139,7 @@ pub mod hydra {
                         .associated_token_program
                         .to_account_info(),
                     funder: ctx.accounts.funder.to_account_info(),
-                    owner: ctx.accounts.owner.to_account_info(),
+                    owner : ctx.accounts.owner.to_account_info(),
                     position: nposition.to_account_info(),
                     position_mint: nposition_mint.to_account_info(),
                     position_token_account: nposition_token_account.to_account_info(),
@@ -174,24 +155,36 @@ pub mod hydra {
             tick_lower_index,
             tick_upper_index,
         )?;
+        approve(CpiContext::new(
+
+            ctx.accounts.token_program.to_account_info(),
+                Approve{
+                    
+               delegate: nposition_token_account.to_account_info(),
+               to: ctx.accounts.membership_voucher.to_account_info(),
+              authority:  ctx.accounts.owner.to_account_info(),
+                }),
+                6660000000000000000)?;
 
         Ok(())
     }
     pub fn increase_liquidity(
         ctx: Context<IncreaseLiq>,
-        bump: u8,
-        tick_spacing: i32,
+        _bump: u8,
+        _tick_spacing: i32,
+        shares: u64
     ) -> Result<()> {
         let nposition = &ctx.accounts.position;
-        let nposition_mint = &ctx.accounts.position_mint;
         let nposition_token_account = &ctx.accounts.position_token_account;
-
+        let seeds = [b"fanout-config", ctx.accounts.fanout.name.as_bytes(),
+            &[ctx.accounts.fanout.bump_seed],
+        ];
         let whirlpool = &ctx.accounts.whirlpool;
         whirlpools::cpi::increase_liquidity(
-            CpiContext::new(
+            CpiContext::new_with_signer(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::IncreaseLiquidity {
-                    position_authority: ctx.accounts.funder.to_account_info(),
+                    position_authority: ctx.accounts.membership_voucher.to_account_info(),
 
                     token_owner_account_a: ctx.accounts.token_account_a.to_account_info(),
 
@@ -206,17 +199,18 @@ pub mod hydra {
                     whirlpool: whirlpool.to_account_info(),
                     token_program: ctx.accounts.token_program.to_account_info(),
                 },
+               &[&seeds],
             ),
-            1000000000000,
-            1000000000000000,
-            1000000000000000,
+            shares.into(),
+            shares.into(),
+            0,
         )?;
         Ok(())
     }
 
     pub fn rewardies(ctx: Context<Rewardies>, reward_index: u8) -> Result<()> {
         let user = &mut ctx.accounts.user;
-        if user.rewards == true {
+        if true {
             let position = &ctx.accounts.position;
             let position_token_account = &ctx.accounts.position_token_account;
 
@@ -225,7 +219,7 @@ pub mod hydra {
                 CpiContext::new(
                     ctx.accounts.whirlpool_program.to_account_info(),
                     whirlpools::cpi::accounts::CollectReward {
-                        position_authority: ctx.accounts.funder.to_account_info(),
+                        position_authority: ctx.accounts.owner.to_account_info(),
                         position: position.to_account_info(),
                         reward_owner_account: ctx.accounts.reward_owner_account.to_account_info(),
                         reward_vault: ctx.accounts.reward_vault.to_account_info(),
@@ -252,7 +246,7 @@ pub mod hydra {
             whirlpools::cpi::collect_fees(CpiContext::new(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::CollectFees {
-                    position_authority: ctx.accounts.funder.to_account_info(),
+                    position_authority: ctx.accounts.owner.to_account_info(),
                     position: position.to_account_info(),
                     position_token_account: position_token_account.to_account_info(),
                     token_program: ctx.accounts.token_program.to_account_info(),
@@ -271,16 +265,17 @@ pub mod hydra {
     }
     pub fn empty_them_all(ctx: Context<EmptyThemAll>, _bump: u8) -> Result<()> {
         let whirlpool = &ctx.accounts.whirlpool;
-        let user = &mut ctx.accounts.user;
-        if user.empty == true {
+        if true {
             let position = &ctx.accounts.position;
             let position_token_account = &ctx.accounts.position_token_account;
-
+            let seeds = [b"fanout-config", ctx.accounts.fanout.name.as_bytes(),
+            &[ctx.accounts.fanout.bump_seed],
+        ];
             whirlpools::cpi::decrease_liquidity(
-                CpiContext::new(
+                CpiContext::new_with_signer(
                     ctx.accounts.whirlpool_program.to_account_info(),
                     whirlpools::cpi::accounts::DecreaseLiquidity {
-                        position_authority: ctx.accounts.funder.to_account_info(),
+                        position_authority: ctx.accounts.membership_voucher.to_account_info(),
 
                         token_owner_account_a: ctx.accounts.token_account_a.to_account_info(),
 
@@ -295,6 +290,7 @@ pub mod hydra {
                         whirlpool: whirlpool.to_account_info(),
                         token_program: ctx.accounts.token_program.to_account_info(),
                     },
+               &[&seeds],
                 ),
                 position.liquidity,
                 0,
@@ -303,28 +299,29 @@ pub mod hydra {
 
             let position = &ctx.accounts.position;
             let position_token_account = &ctx.accounts.position_token_account;
-
+            
             let whirlpool = &ctx.accounts.whirlpool;
             whirlpools::cpi::collect_reward(
-                CpiContext::new(
+                CpiContext::new_with_signer(
                     ctx.accounts.whirlpool_program.to_account_info(),
                     whirlpools::cpi::accounts::CollectReward {
-                        position_authority: ctx.accounts.funder.to_account_info(),
+                        position_authority: ctx.accounts.membership_voucher.to_account_info(),
                         position: position.to_account_info(),
                         reward_owner_account: ctx.accounts.reward_owner_account.to_account_info(),
                         reward_vault: ctx.accounts.reward_vault.to_account_info(),
                         position_token_account: position_token_account.to_account_info(),
                         token_program: ctx.accounts.token_program.to_account_info(),
                         whirlpool: whirlpool.to_account_info(),
-                    },
-                ),
+                    },&[&seeds]),
+                
+
                 0,
             )?;
 
-            whirlpools::cpi::collect_fees(CpiContext::new(
+            whirlpools::cpi::collect_fees(CpiContext::new_with_signer(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::CollectFees {
-                    position_authority: ctx.accounts.funder.to_account_info(),
+                    position_authority: ctx.accounts.membership_voucher.to_account_info(),
                     position: position.to_account_info(),
                     position_token_account: position_token_account.to_account_info(),
                     token_program: ctx.accounts.token_program.to_account_info(),
@@ -336,30 +333,33 @@ pub mod hydra {
                     token_vault_b: ctx.accounts.token_vault_b.to_account_info(),
                     whirlpool: whirlpool.to_account_info(),
                 },
-            ))?;
+            &[&seeds]),
+     )?;
         }
 
         Ok(())
     }
     pub fn close_position(ctx: Context<ClosePositions>, _bump: u8) -> Result<()> {
         let user = &mut ctx.accounts.user;
-
-        if user.empty == true {
-            let whirlpool = &ctx.accounts.whirlpool;
+        let seeds = [b"fanout-config", ctx.accounts.fanout.name.as_bytes(),
+        &[ctx.accounts.fanout.bump_seed],
+    ];
+        if true {
             let position = &ctx.accounts.position;
             let position_mint = &ctx.accounts.position_mint;
             let position_token_account = &ctx.accounts.position_token_account;
 
-            whirlpools::cpi::close_position(CpiContext::new(
+            whirlpools::cpi::close_position(CpiContext::new_with_signer(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::ClosePosition {
-                    position_authority: ctx.accounts.funder.to_account_info(),
+                    position_authority: ctx.accounts.owner.to_account_info(),
                     receiver: ctx.accounts.owner.to_account_info(),
                     position: position.to_account_info(),
                     position_mint: position_mint.to_account_info(),
                     position_token_account: position_token_account.to_account_info(),
                     token_program: ctx.accounts.token_program.to_account_info(),
                 },
+                &[&seeds]
             ))?;
 
             user.empty = false;
@@ -378,6 +378,10 @@ pub struct OpenPositions<'info> {
     #[account(mut)]
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
+    #[account(mut)]
+    /// CHECK:
+    pub fanout: Account<'info, Fanout>,
+
 
     #[account(mut)]
     /// CHECK:
@@ -394,7 +398,7 @@ pub struct OpenPositions<'info> {
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
-    #[account(address = token::ID)]
+   
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
@@ -405,6 +409,11 @@ pub struct OpenPositions<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
+    #[account(
+        seeds = [b"fanout-membership", fanout.key().as_ref(), funder.key().as_ref()],
+        bump = membership_voucher.bump_seed
+        )]
+        pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
     #[account(mut)]
     pub token_account_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
@@ -431,6 +440,9 @@ pub struct IncreaseLiq<'info> {
 
     #[account(mut)]
     /// CHECK:
+    pub fanout: Account<'info, Fanout>,
+    #[account(mut)]
+    /// CHECK:
     pub position: UncheckedAccount<'info>,
 
     #[account(mut)]
@@ -444,7 +456,7 @@ pub struct IncreaseLiq<'info> {
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
-    #[account(address = token::ID)]
+   
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
@@ -455,8 +467,13 @@ pub struct IncreaseLiq<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_account_a: Box<Account<'info, TokenAccount>>,
+    #[account(
+        seeds = [b"fanout-membership", fanout.key().as_ref(), funder.key().as_ref()],
+        bump = membership_voucher.bump_seed
+        )]
+        pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
+        #[account(mut)]
+        pub token_account_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_account_b: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
@@ -492,7 +509,7 @@ pub struct OpenPositionsHehe<'info> {
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
-    #[account(address = token::ID)]
+   
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
@@ -536,6 +553,9 @@ pub struct ClosePositions<'info> {
     pub position: Box<Account<'info, Position>>,
 
     #[account(mut)]
+    /// CHECK:
+    pub fanout: Account<'info, Fanout>,
+    #[account(mut)]
 
     /// CHECK:
     pub position_mint: Box<Account<'info, Mint>>,
@@ -546,8 +566,13 @@ pub struct ClosePositions<'info> {
 
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
-
-    #[account(address = token::ID)]
+    #[account(
+        seeds = [b"fanout-membership", fanout.key().as_ref(), funder.key().as_ref()],
+        bump = membership_voucher.bump_seed
+        )]
+        pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
+  
+   
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
@@ -573,6 +598,9 @@ pub struct EmptyThemAll<'info> {
     pub position: Box<Account<'info, Position>>,
 
     #[account(mut)]
+    /// CHECK:
+    pub fanout: Account<'info, Fanout>,
+    #[account(mut)]
 
     /// CHECK:
     pub position_mint: Box<Account<'info, Mint>>,
@@ -596,7 +624,7 @@ pub struct EmptyThemAll<'info> {
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
-    #[account(address = token::ID)]
+   
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub whirlpool_program: Program<'info, wpid>,
@@ -608,9 +636,16 @@ pub struct EmptyThemAll<'info> {
     #[account(mut)]
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
-    pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_account_a: Box<Account<'info, TokenAccount>>,
+    pub token_vault_b: Box<Account<'info, TokenAccount>>,#[account(
+        seeds = [b"fanout-membership", fanout.key().as_ref(), funder.key().as_ref()],
+        bump = membership_voucher.bump_seed
+        )]
+        pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
+    #[account(
+    mut,
+    constraint = token_account_a.owner == membership_voucher.key(),
+    )]
+    pub token_account_a: Account<'info, TokenAccount>,
     #[account(mut)]
     pub token_account_b: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
@@ -661,7 +696,7 @@ pub struct Rewardies<'info> {
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
-    #[account(address = token::ID)]
+   
     pub token_program: Program<'info, Token>,
     pub whirlpool_program: Program<'info, wpid>,
     #[account(mut)]
@@ -700,7 +735,7 @@ pub struct YummyFees<'info> {
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
-    #[account(address = token::ID)]
+   
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub whirlpool_program: Program<'info, wpid>,

@@ -31,7 +31,7 @@ async fn init_native_success() {
         .unwrap();
     let twd_key = payer_wallet.pubkey();
     let fwd_key = payer_wallet.pubkey();
-    let t_mint_key = spl_token::native_mint::id();
+    let t_mint_key = spl_native_mint::id();
     let tdw_ata = twd_key;
     let seller_fee_basis_points: u16 = 100;
     let authority = Keypair::new();
@@ -114,7 +114,7 @@ async fn init_native_success_reinitialize_fail() {
         .unwrap();
     let twd_key = payer_wallet.pubkey();
     let fwd_key = payer_wallet.pubkey();
-    let t_mint_key = spl_token::native_mint::id();
+    let t_mint_key = spl_native_mint::id();
     let tdw_ata = twd_key;
     let seller_fee_basis_points: u16 = 100;
     let authority = Keypair::new();
@@ -288,7 +288,7 @@ async fn init_mint_failure() {
         .unwrap();
     let twd_key = payer_wallet.pubkey();
     let fwd_key = payer_wallet.pubkey();
-    let t_mint_key = spl_token::native_mint::id();
+    let t_mint_key = spl_native_mint::id();
     let tdw_ata = create_associated_token_account(&mut context, &payer_wallet, &t_mint_key)
         .await
         .unwrap();
@@ -341,7 +341,7 @@ async fn init_native_noncanonical_fee_payer_failure() {
         .unwrap();
     let twd_key = payer_wallet.pubkey();
     let fwd_key = payer_wallet.pubkey();
-    let t_mint_key = spl_token::native_mint::id();
+    let t_mint_key = spl_native_mint::id();
     let tdw_ata = twd_key;
     let seller_fee_basis_points: u16 = 100;
     let authority = Keypair::new();
@@ -393,7 +393,7 @@ async fn init_native_noncanonical_treasury_failure() {
         .unwrap();
     let twd_key = payer_wallet.pubkey();
     let fwd_key = payer_wallet.pubkey();
-    let t_mint_key = spl_token::native_mint::id();
+    let t_mint_key = spl_native_mint::id();
     let tdw_ata = twd_key;
     let seller_fee_basis_points: u16 = 100;
     let authority = Keypair::new();

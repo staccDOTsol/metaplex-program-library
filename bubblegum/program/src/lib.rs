@@ -1500,7 +1500,7 @@ pub mod bubblegum {
                     ]],
                 )?;
             }
-            TokenProgramVersion::Token2022 => return Err(ProgramError::InvalidArgument.into()),
+            TokenProgramVersion::Token => return Err(ProgramError::InvalidArgument.into()),
         }
 
         invoke_signed(

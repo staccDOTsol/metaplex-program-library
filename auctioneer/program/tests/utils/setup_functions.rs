@@ -639,7 +639,7 @@ pub async fn existing_auction_house_test_context(
 ) -> StdResult<(AuctionHouse, Pubkey, Keypair), BanksClientError> {
     let twd_key = context.payer.pubkey();
     let fwd_key = context.payer.pubkey();
-    let t_mint_key = spl_token::native_mint::id();
+    let t_mint_key = spl_native_mint::id();
     let tdw_ata = twd_key;
     let seller_fee_basis_points: u16 = 100;
     let authority = Keypair::new();

@@ -12,7 +12,7 @@ import * as beet from '@metaplex-foundation/beet';
  */
 export enum TokenProgramVersion {
   Original,
-  Token2022,
+ ,
 }
 
 /**

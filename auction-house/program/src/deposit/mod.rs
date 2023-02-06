@@ -273,7 +273,7 @@ fn deposit_logic<'info>(
         &seeds,
     )?;
 
-    let is_native = treasury_mint.key() == spl_token::native_mint::id();
+    let is_native = treasury_mint.key() == spl_native_mint::id();
 
     create_program_token_account_if_not_present(
         escrow_payment_account,

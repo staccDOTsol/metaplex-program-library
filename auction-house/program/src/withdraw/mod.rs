@@ -282,7 +282,7 @@ fn withdraw_logic<'info>(
         &seeds,
     )?;
 
-    let is_native = treasury_mint.key() == spl_token::native_mint::id();
+    let is_native = treasury_mint.key() == spl_native_mint::id();
 
     if !is_native {
         if receipt_account.data_is_empty() {

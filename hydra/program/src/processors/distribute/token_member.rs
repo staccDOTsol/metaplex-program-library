@@ -1,5 +1,5 @@
 use crate::error::HydraError;
-
+use anchor_spl::token::Token;
 use crate::state::{Fanout, FanoutMembershipVoucher, MembershipModel};
 
 use crate::utils::logic::distribution::{distribute_mint, distribute_native};
@@ -7,7 +7,7 @@ use crate::utils::logic::distribution::{distribute_mint, distribute_native};
 use crate::utils::validation::*;
 
 use anchor_lang::prelude::*;
-use anchor_spl::token::{Mint, Token, TokenAccount};
+use anchor_spl::token::{Mint, TokenAccount};
 
 #[derive(Accounts)]
 #[instruction(distribute_for_mint: bool)]
@@ -53,6 +53,7 @@ pub struct DistributeTokenMember<'info> {
     pub fanout_mint_member_token_account: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
+   
     pub token_program: Program<'info, Token>,
     #[account(
     mut,

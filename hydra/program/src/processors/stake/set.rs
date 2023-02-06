@@ -38,6 +38,7 @@ pub struct SetTokenMemberStake<'info> {
     constraint = membership_mint_token_account.owner == member.key()
     )]
     pub membership_mint_token_account: Account<'info, TokenAccount>,
+    
     #[account(
     mut,
     constraint = member_stake_account.owner == membership_voucher.key(),
@@ -77,6 +78,7 @@ pub fn set_token_member_stake(ctx: Context<SetTokenMemberStake>, shares: u64) ->
         to: ctx.accounts.member_stake_account.to_account_info(),
         authority: member.to_account_info(),
     };
+
     let cpi_ctx = CpiContext::new(cpi_program, accounts);
     anchor_spl::token::transfer(cpi_ctx, shares)?;
     Ok(())

@@ -202,7 +202,7 @@ fn main() -> Result<(), error::Error> {
                 let mint = if let Some(mint) = mint {
                     mint
                 } else {
-                    spl_token::native_mint::id()
+                    spl_native_mint::id()
                 };
 
                 let start_date = if let Some(start_date) = start_date {

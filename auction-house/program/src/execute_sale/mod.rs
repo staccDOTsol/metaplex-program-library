@@ -1024,7 +1024,7 @@ fn auctioneer_execute_sale_logic<'c, 'info>(
     let buyer_receipt_clone = buyer_receipt_token_account.to_account_info();
     let token_account_clone = token_account.to_account_info();
 
-    let is_native = treasury_mint.key() == spl_token::native_mint::id();
+    let is_native = treasury_mint.key() == spl_native_mint::id();
 
     if buyer_price == 0 && !authority_clone.is_signer && !seller.is_signer {
         return Err(
@@ -1407,7 +1407,7 @@ fn execute_sale_logic<'c, 'info>(
     let buyer_receipt_clone = buyer_receipt_token_account.to_account_info();
     let token_account_clone = token_account.to_account_info();
 
-    let is_native = treasury_mint.key() == spl_token::native_mint::id();
+    let is_native = treasury_mint.key() == spl_native_mint::id();
 
     if buyer_price == 0 && !authority_clone.is_signer && !seller.is_signer {
         return Err(

@@ -145,7 +145,7 @@ pub fn assert_valid_delegation(
             msg!("ATAs match")
         }
         Err(_) => {
-            if mint.key() != spl_token::native_mint::id() {
+            if mint.key() != spl_native_mint::id() {
                 return err!(AuctionHouseError::ExpectedSolAccount);
             }
 

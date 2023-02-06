@@ -2,8 +2,8 @@
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
-wallet = "~/.config/solana/id.json"
+cluster = "devnet"
+wallet = "~/g3s.json"
 
 [programs.localnet]
 auction_house="hausS13jsjafwWwGqZTUQRmWyvyxn9EQpqMwV1PBBmk"
@@ -30,15 +30,11 @@ address = "gdrpGjVffourzkdDRrQmySw4aTHr8a3xmQzzxSwFD1a"
 program = "target/deploy/mpl_gumdrop.so"
 
 [[test.genesis]]
-address = "hyDQ4Nz1eYyegS6JfenyKwKzYxRsCWCriYSAjtzP4Vg"
+address = "B9epCa7ZozSMAN2dSnLTfV32exgGnfrEu3M8NJTeTZ9j"
 program = "target/deploy/mpl_hydra.so"
 
 [workspace]
 members = [
-  "token-entangler/program",
-  "token-metadata/program",
-  "auction-house/program",
-  "fixed-price-sale/program",
-  "hydra/program",
-  "bubblegum/program",
+  "hydra/program"
+
 ]
