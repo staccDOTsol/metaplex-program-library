@@ -44,7 +44,7 @@ export const openPositionStruct = new beet.BeetArgsStruct<
  * @property [] owner
  * @property [_writable_] fanout
  * @property [_writable_] position
- * @property [_writable_, **signer**] positionMint
+ * @property [_writable_] positionMint
  * @property [_writable_] positionTokenAccount
  * @property [] whirlpool
  * @property [] associatedTokenProgram
@@ -128,7 +128,7 @@ export function createOpenPositionInstruction(
     {
       pubkey: accounts.positionMint,
       isWritable: true,
-      isSigner: true,
+      isSigner: false,
     },
     {
       pubkey: accounts.positionTokenAccount,

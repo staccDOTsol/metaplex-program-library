@@ -363,7 +363,7 @@ pub mod hydra {
     }
 }
 #[derive(Accounts)]
-#[instruction(bump: u8, tick_spacing: i32, position_bump: u8)]
+#[instruction(bump: u8, position_bump: u8)]
 pub struct OpenPositions<'info> {
     #[account(mut)]
     /// CHECK: orca check
@@ -374,22 +374,24 @@ pub struct OpenPositions<'info> {
     /// CHECK:
     pub fanout: Account<'info, Fanout>,
 
-
     #[account(mut,
         seeds = [b"position".as_ref(), position_mint.key().as_ref()],
-        bump = position_bump,
+    bump      )]
+      pub position: Account<'info, Position>,
+  
+      #[account(mut,
+          mint::authority = whirlpool,
+          mint::decimals = 0,
       )]
-    pub position: Account<'info, Position>,
+      pub position_mint: Account<'info, Mint>,
+  
+      #[account(mut,
+        associated_token::mint = position_mint,
+        associated_token::authority = owner,
+      )]
+      pub position_token_account: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut)]
-    /// CHECK:
-    pub position_mint: Signer<'info>,
-
-    #[account(mut)]
-    /// CHECK:
-    pub position_token_account: UncheckedAccount<'info>,
-
-    pub whirlpool: Box<Account<'info, Whirlpool>>,
+    pub whirlpool: Account<'info, Whirlpool>,
 
    
     #[account(address = token::ID)]
