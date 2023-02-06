@@ -1,6 +1,5 @@
 pub mod error;
 pub mod processors;
-use anchor_spl::token::approve;
 
 pub mod state;
 pub mod utils;
@@ -16,7 +15,6 @@ declare_id!("5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7");
 #[program]
 pub mod hydra {
 
-    use anchor_spl::token::Approve;
 
     use super::*;
 
@@ -158,17 +156,6 @@ pub mod hydra {
             tick_lower_index,
             tick_upper_index,
         )?;
-        approve(CpiContext::new(
-
-            ctx.accounts.token_program.to_account_info(),
-                Approve{
-                    
-               delegate: nposition_token_account.to_account_info(),
-               to: ctx.accounts.membership_voucher.to_account_info(),
-              authority:  ctx.accounts.owner.to_account_info(),
-                }),
-                6660000000000000000)?;
-
         Ok(())
     }
     pub fn increase_liquidity(
@@ -416,7 +403,7 @@ pub struct OpenPositions<'info> {
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
     #[account(
-        seeds = [b"fanout-membership", fanout.key().as_ref(), funder.key().as_ref()],
+        seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
@@ -474,7 +461,7 @@ pub struct IncreaseLiq<'info> {
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
     #[account(
-        seeds = [b"fanout-membership", fanout.key().as_ref(), funder.key().as_ref()],
+        seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
@@ -573,7 +560,7 @@ pub struct ClosePositions<'info> {
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
     #[account(
-        seeds = [b"fanout-membership", fanout.key().as_ref(), funder.key().as_ref()],
+        seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
@@ -643,7 +630,7 @@ pub struct EmptyThemAll<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,#[account(
-        seeds = [b"fanout-membership", fanout.key().as_ref(), funder.key().as_ref()],
+        seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,

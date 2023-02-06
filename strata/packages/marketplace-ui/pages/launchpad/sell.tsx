@@ -38,6 +38,7 @@ export const SellToken: FC = () => {
   const mint = router.query["mint"] as string | undefined;
   const { hasCopied, onCopy } = useClipboard(mint || "");
   const [names, setNames] = useState<string[]>([])
+  const [first, setFirst ] = useState<boolean>(true)
   useEffect(() =>{
     console.log(selectedOption)
     console.log(138)
@@ -49,11 +50,11 @@ export const SellToken: FC = () => {
     let fanoutSdk = new FanoutClient(connection, (provider.wallet));
     const fetcher = new AccountFetcher(connection);
   
-      let fo = fanout ??  await fanoutSdk.fetch<Fanout>(new PublicKey(selectedOption as string), Fanout)
+      let fo = await fanoutSdk.fetch<Fanout>(new PublicKey(selectedOption as string), Fanout)
       if (fo){
       console.log(fo)
       let toptions = jaries 
-      if (!fanout){
+      if (true){
         setFanout2(new PublicKey(selectedOption as string))
         }
       setFanout(fo)
@@ -75,24 +76,22 @@ export const SellToken: FC = () => {
         }
       }
       if (!names.includes(fo.whirlpool.toBase58())){
-        let tnames = names
-        tnames.push(fo.whirlpool.toBase58())
-        setNames(tnames)
-      toptions.push({value: fo.whirlpool.toBase58(),
+        
+      toptions[0]=({value: fo.whirlpool.toBase58(),
         heading: "Pool 1 liq: " +pool.liquidity.toNumber(),
         illustration: "/price-discovery.svg",
         helpText: fo.whirlpool2.toBase58()})
-        toptions.push({value: fo.whirlpool2.toBase58(),
+        toptions[1]=({value: fo.whirlpool2.toBase58(),
           // @ts-ignore
           heading: "Pool 2 liq: " + pool2.liquidity.toNumber(),
           illustration: "/price-discovery.svg",
           helpText: fo.whirlpool3.toBase58()})
-          toptions.push({value: fo.whirlpool3.toBase58(),
+          toptions[2]=({value: fo.whirlpool3.toBase58(),
             // @ts-ignore
             heading: "Pool 3! liq: " +pool3.liquidity.toNumber(),
             illustration: "/price-discovery.svg",
             helpText: fo.whirlpool4.toBase58()})
-            toptions.push({value: fo.whirlpool4.toBase58(),
+            toptions[3]=({value: fo.whirlpool4.toBase58(),
               // @ts-ignore
               heading: "Pool 4! liq: " + pool4.liquidity.toNumber(),
               illustration: "/price-discovery.svg",
@@ -123,7 +122,8 @@ console.log(selectedOption2)
 
   async function ooggaa(){
     let connection = provider?.connection 
-    if (connection){
+    if (connection && first){
+      setFirst(false)
       // @ts-ignore
     let fanoutSdk = new FanoutClient(connection, (provider.wallet));
     let gpaconfig : GetProgramAccountsConfig = await Fanout.gpaBuilder().config
@@ -151,9 +151,8 @@ console.log(selectedOption2)
         }
       }
       if (!names.includes(fo.name)){
-        let tnames = names
-        tnames.push(fo.name)
-        setNames(tnames)
+
+        setNames([...names,fo.name])
         toptions.push({value: gpa.pubkey.toBase58(),
           heading: fo.name,
           illustration: "/price-discovery.svg",

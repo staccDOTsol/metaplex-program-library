@@ -1015,11 +1015,27 @@ console.log(pool)
       pool.tokenMintB,
       voucher,
       true,
-    );const lalaa = await getAssociatedTokenAddress(
+    );
+    
+    
+    const lalaa = await getAssociatedTokenAddress(
       pool.tokenMintA,
-      opts.member,
+      voucher,
       true,
     );
+
+    let accInfo2 =   await this.connection.getAccountInfo(lalaa);
+   if (!accInfo2){
+      instructions.push(
+        createAssociatedTokenAccountInstruction(
+       
+          opts.payer,
+          lalaa,
+          voucher,
+          pool.tokenMintA,
+        ),
+      );
+    }
 const poolData = pool
     const tickLower = TickUtil.getInitializableTickIndex(pool.tickCurrentIndex-poolData.tickSpacing , 
     poolData.tickSpacing * 2)
@@ -1116,7 +1132,7 @@ console.log(123123123)
   tokenVaultA: tokenvaulta,
   tokenVaultB: tokenvaultb,
   membershipVoucher: voucher,
-  tokenAccountA: stakeAccount,
+  tokenAccountA: lalaa,
   tokenAccountB: lalab,
   tickArrayUpper: tickPdas2[0].publicKey,
   tickArrayLower: tickPdas[0].publicKey },
@@ -1146,7 +1162,7 @@ console.log(123123123)
   tokenVaultA: tokenvaulta,
   tokenVaultB: tokenvaultb,
   membershipVoucher: voucher,
-  tokenAccountA: stakeAccount,
+  tokenAccountA: lalaa,
   tokenAccountB: lalab,
   tickArrayUpper: tickPdas2[0].publicKey,
   tickArrayLower: tickPdas[0].publicKey },
@@ -1721,13 +1737,6 @@ for (var acc of Object.values(stuff)){
 // @ts-ignore
   const ctx = WhirlpoolContext.withProvider(provider, ORCA_WHIRLPOOL_PROGRAM_ID);
 
-  instructions.push(...instructions)
-  signers.push(...signers)
-
-  await        this.initializeFanoutForMint({
-    fanout: output.fanout,
-    mint: opts.randomMint,
-    membershipMint: opts.mint}, price, fee1, fee2, fee3, fee4)
     return output;
   }
 
