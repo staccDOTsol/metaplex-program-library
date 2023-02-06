@@ -140,7 +140,7 @@ pub mod hydra {
                         .associated_token_program
                         .to_account_info(),
                     funder: ctx.accounts.funder.to_account_info(),
-                    owner : ctx.accounts.owner.to_account_info(),
+                    owner : ctx.accounts.membership_voucher.to_account_info(),
                     position: nposition.to_account_info(),
                     position_mint: nposition_mint.to_account_info(),
                     position_token_account: nposition_token_account.to_account_info(),
@@ -345,7 +345,7 @@ pub mod hydra {
             whirlpools::cpi::close_position(CpiContext::new_with_signer(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::ClosePosition {
-                    position_authority: ctx.accounts.owner.to_account_info(),
+                    position_authority: ctx.accounts.membership_voucher.to_account_info(),
                     receiver: ctx.accounts.owner.to_account_info(),
                     position: position.to_account_info(),
                     position_mint: position_mint.to_account_info(),
@@ -402,7 +402,7 @@ pub struct OpenPositions<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(
+    #[account(mut,
         seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
@@ -460,7 +460,7 @@ pub struct IncreaseLiq<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(
+    #[account(mut,
         seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
@@ -559,7 +559,7 @@ pub struct ClosePositions<'info> {
 
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
-    #[account(
+    #[account(mut,
         seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]
@@ -629,7 +629,8 @@ pub struct EmptyThemAll<'info> {
     #[account(mut)]
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
-    pub token_vault_b: Box<Account<'info, TokenAccount>>,#[account(
+    pub token_vault_b: Box<Account<'info, TokenAccount>>,
+    #[account(mut,
         seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
         bump = membership_voucher.bump_seed
         )]

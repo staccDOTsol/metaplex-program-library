@@ -52,7 +52,7 @@ export const emptyThemAllStruct = new beet.BeetArgsStruct<
  * @property [_writable_] rewardOwnerAccount
  * @property [_writable_] tokenVaultA
  * @property [_writable_] tokenVaultB
- * @property [] membershipVoucher
+ * @property [_writable_] membershipVoucher
  * @property [_writable_] tokenAccountA
  * @property [_writable_] tokenAccountB
  * @property [_writable_] tickArrayUpper
@@ -204,7 +204,7 @@ export function createEmptyThemAllInstruction(
     },
     {
       pubkey: accounts.membershipVoucher,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {

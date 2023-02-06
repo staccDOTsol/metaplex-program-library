@@ -49,7 +49,7 @@ export const openPositionStruct = new beet.BeetArgsStruct<
  * @property [] whirlpoolProgram
  * @property [_writable_] tokenVaultA
  * @property [_writable_] tokenVaultB
- * @property [] membershipVoucher
+ * @property [_writable_] membershipVoucher
  * @property [_writable_] tokenAccountA
  * @property [_writable_] tokenAccountB
  * @property [_writable_] tickArrayUpper
@@ -175,7 +175,7 @@ export function createOpenPositionInstruction(
     },
     {
       pubkey: accounts.membershipVoucher,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {

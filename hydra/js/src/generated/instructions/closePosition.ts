@@ -43,7 +43,7 @@ export const closePositionStruct = new beet.BeetArgsStruct<
  * @property [_writable_] positionMint
  * @property [_writable_] positionTokenAccount
  * @property [_writable_] whirlpool
- * @property [] membershipVoucher
+ * @property [_writable_] membershipVoucher
  * @property [] associatedTokenProgram
  * @property [] whirlpoolProgram
  * @property [] user
@@ -128,7 +128,7 @@ export function createClosePositionInstruction(
     },
     {
       pubkey: accounts.membershipVoucher,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {
