@@ -401,10 +401,7 @@ pub struct OpenPositions<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut,
-        seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
-        bump = membership_voucher.bump_seed
-        )]
+    #[account(mut)]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
     #[account(mut)]
     pub token_account_a: Box<Account<'info, TokenAccount>>,
@@ -468,10 +465,6 @@ pub struct IncreaseLiq<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub whirlpool_program: Program<'info, wpid>,
 
-    #[account(
-        seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
-        bump = membership_voucher.bump_seed
-        )]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
 }
 #[derive(Accounts)]
@@ -555,10 +548,8 @@ pub struct ClosePositions<'info> {
 
     #[account(mut)]
     pub whirlpool: Box<Account<'info, Whirlpool>>,
-    #[account(mut,
-        seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
-        bump = membership_voucher.bump_seed
-        )]
+    
+    #[account(mut)]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
   
    
@@ -626,10 +617,8 @@ pub struct EmptyThemAll<'info> {
     pub token_vault_a: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut,
-        seeds = [b"fanout-membership", fanout.key().as_ref(), owner.key().as_ref()],
-        bump = membership_voucher.bump_seed
-        )]
+  
+    #[account(mut)]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
     #[account(
     mut,
