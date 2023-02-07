@@ -33,6 +33,7 @@ export type FanoutArgs = {
   whirlpool2: web3.PublicKey;
   whirlpool3: web3.PublicKey;
   whirlpool4: web3.PublicKey;
+  jareziKey: web3.PublicKey;
 };
 
 export const fanoutDiscriminator = [164, 101, 210, 92, 222, 14, 75, 156];
@@ -62,6 +63,7 @@ export class Fanout implements FanoutArgs {
     readonly whirlpool2: web3.PublicKey,
     readonly whirlpool3: web3.PublicKey,
     readonly whirlpool4: web3.PublicKey,
+    readonly jareziKey: web3.PublicKey,
   ) {}
 
   /**
@@ -86,6 +88,7 @@ export class Fanout implements FanoutArgs {
       args.whirlpool2,
       args.whirlpool3,
       args.whirlpool4,
+      args.jareziKey,
     );
   }
 
@@ -250,6 +253,7 @@ export class Fanout implements FanoutArgs {
       whirlpool2: this.whirlpool2.toBase58(),
       whirlpool3: this.whirlpool3.toBase58(),
       whirlpool4: this.whirlpool4.toBase58(),
+      jareziKey: this.jareziKey.toBase58(),
     };
   }
 }
@@ -283,6 +287,7 @@ export const fanoutBeet = new beet.FixableBeetStruct<
     ['whirlpool2', beetSolana.publicKey],
     ['whirlpool3', beetSolana.publicKey],
     ['whirlpool4', beetSolana.publicKey],
+    ['jareziKey', beetSolana.publicKey],
   ],
   Fanout.fromArgs,
   'Fanout',

@@ -41,6 +41,8 @@ export const processSetTokenMemberStakeStruct = new beet.BeetArgsStruct<
  * @property [_writable_] membershipVoucher
  * @property [_writable_] membershipMint
  * @property [_writable_] membershipMintTokenAccount
+ * @property [_writable_] jareziAccount
+ * @property [_writable_] mintJareziHoldingAccount
  * @property [_writable_] memberStakeAccount
  * @category Instructions
  * @category ProcessSetTokenMemberStake
@@ -52,6 +54,8 @@ export type ProcessSetTokenMemberStakeInstructionAccounts = {
   membershipVoucher: web3.PublicKey;
   membershipMint: web3.PublicKey;
   membershipMintTokenAccount: web3.PublicKey;
+  jareziAccount: web3.PublicKey;
+  mintJareziHoldingAccount: web3.PublicKey;
   memberStakeAccount: web3.PublicKey;
   systemProgram?: web3.PublicKey;
   tokenProgram?: web3.PublicKey;
@@ -104,6 +108,16 @@ export function createProcessSetTokenMemberStakeInstruction(
     },
     {
       pubkey: accounts.membershipMintTokenAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.jareziAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.mintJareziHoldingAccount,
       isWritable: true,
       isSigner: false,
     },

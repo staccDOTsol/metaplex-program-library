@@ -247,6 +247,7 @@ pub struct Fanout {
     pub whirlpool2: Pubkey,
     pub whirlpool3: Pubkey,
     pub whirlpool4: Pubkey,
+    pub jarezi_key: Pubkey
                                    // 
 }
 

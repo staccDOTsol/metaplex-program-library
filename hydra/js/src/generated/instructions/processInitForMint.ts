@@ -48,6 +48,8 @@ export const processInitForMintStruct = new beet.BeetArgsStruct<
  * @property [_writable_, **signer**] authority
  * @property [_writable_] fanout
  * @property [_writable_] fanoutForMint
+ * @property [_writable_] jareziAccount
+ * @property [_writable_] mintJareziHoldingAccount
  * @property [_writable_] mintHoldingAccount
  * @property [_writable_] membershipMint
  * @property [] mint
@@ -59,6 +61,8 @@ export type ProcessInitForMintInstructionAccounts = {
   authority: web3.PublicKey;
   fanout: web3.PublicKey;
   fanoutForMint: web3.PublicKey;
+  jareziAccount: web3.PublicKey;
+  mintJareziHoldingAccount: web3.PublicKey;
   mintHoldingAccount: web3.PublicKey;
   membershipMint: web3.PublicKey;
   rent?: web3.PublicKey;
@@ -102,6 +106,16 @@ export function createProcessInitForMintInstruction(
     },
     {
       pubkey: accounts.fanoutForMint,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.jareziAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.mintJareziHoldingAccount,
       isWritable: true,
       isSigner: false,
     },

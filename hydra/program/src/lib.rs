@@ -154,15 +154,14 @@ pub mod hydra {
     }
     pub fn increase_liquidity(
         ctx: Context<IncreaseLiq>,
-        _bump: u8,
+        bump: u8,
         _tick_spacing: i32,
         shares: u64
     ) -> Result<()> {
         let nposition = &ctx.accounts.position;
         let nposition_token_account = &ctx.accounts.position_token_account;
-        let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
-        ctx.accounts.membership_voucher.membership_key.as_ref(),
-        &[ctx.accounts.membership_voucher.bump_seed],
+        let seeds = [b"authority".as_ref(),
+        &[bump],
         ];
         let signer_seeds = [seeds.as_ref()];
     
@@ -172,7 +171,7 @@ pub mod hydra {
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::IncreaseLiquidity {
 
-                    position_authority: ctx.accounts.position_authority.to_account_info(),
+                    position_authority: ctx.accounts.jarezi_account.to_account_info(),
 
                     token_owner_account_a: ctx.accounts.token_owner_account_a.to_account_info(),
 
@@ -191,7 +190,7 @@ pub mod hydra {
             ),
             shares.into(),
             shares.into(),
-            0,
+            shares.into(),
         )?;
         Ok(())
     }
@@ -354,9 +353,11 @@ pub struct IncreaseLiq<'info> {
     /// CHECK:
     pub position_token_account: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut, constraint = token_owner_account_a.mint == whirlpool.token_mint_a)]
+    #[account(mut, constraint = token_owner_account_a.mint == whirlpool.token_mint_a &&
+        token_owner_account_a.owner == jarezi_account.key())]
     pub token_owner_account_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut, constraint = token_owner_account_b.mint == whirlpool.token_mint_b)]
+    #[account(mut, constraint = token_owner_account_b.mint == whirlpool.token_mint_b &&
+        token_owner_account_b.owner == jarezi_account.key())]
     pub token_owner_account_b: Box<Account<'info, TokenAccount>>,
 
     #[account(mut, constraint = token_vault_a.key() == whirlpool.token_vault_a)]
@@ -371,13 +372,16 @@ pub struct IncreaseLiq<'info> {
     /// CHECK:
     pub tick_array_upper: UncheckedAccount<'info>,
 
-   
+    
+    #[account(mut)]
+    /// CHECK:
+    pub fanout: Account<'info, Fanout>,
     pub system_program: Program<'info, System>,
     pub whirlpool_program: Program<'info, wpid>,
-    /// CHECK:
-pub position_authority: UncheckedAccount<'info>,
-/// CHECK:
-        pub membership_voucher: Box<Account<'info, FanoutMembershipVoucher>>,
+    #[account(mut,
+    constraint = jarezi_account.key() == fanout.jarezi_key,seeds = [b"authority"], bump)]
+    /// CHECK: jarezi
+    pub jarezi_account: UncheckedAccount<'info>
 }
 #[derive(Accounts)]
 #[instruction(bump: u8)]

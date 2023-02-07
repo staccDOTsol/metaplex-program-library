@@ -27,6 +27,19 @@ pub struct InitializeFanoutForMint<'info> {
     bump
     )]
     pub fanout_for_mint:  Box<Account<'info, FanoutMint>>,
+    #[account(mut,seeds = [b"authority"], bump,
+    constraint = jarezi_account.key() == fanout.jarezi_key)]
+    /// CHECK: jarezi
+    pub jarezi_account: UncheckedAccount<'info>,
+    #[account(
+    mut,
+    constraint = mint_jarezi_holding_account.owner == jarezi_account.key(),
+    constraint = mint_jarezi_holding_account.delegate.is_none(),
+    constraint = mint_jarezi_holding_account.close_authority.is_none(),
+    constraint = mint_jarezi_holding_account.mint == mint.key(),
+    )
+    ]
+    pub mint_jarezi_holding_account: Box<Account<'info, TokenAccount>>,
     #[account(
     mut,
     constraint = mint_holding_account.owner == fanout.key(),
@@ -52,6 +65,8 @@ pub fn init_for_mint(ctx: Context<InitializeFanoutForMint>, bump_seed: u8,
      whirlpool3: Pubkey, whirlpool4: Pubkey) -> Result<()> {
     
         let fanout_mint = &mut ctx.accounts.fanout_for_mint;
+        let jarezi_account = &ctx.accounts.jarezi_account;
+        let mint_jarezi_holding_account = &ctx.accounts.mint_jarezi_holding_account;
     let fanout = &ctx.accounts.fanout;
     let mint_holding_account = &ctx.accounts.mint_holding_account;
     fanout_mint.fanout = fanout.to_account_info().key();
@@ -62,6 +77,12 @@ pub fn init_for_mint(ctx: Context<InitializeFanoutForMint>, bump_seed: u8,
     assert_ata(
         &mint_holding_account.to_account_info(),
         &fanout.key(),
+        &ctx.accounts.mint.key(),
+        Some(HydraError::HoldingAccountMustBeAnATA.into()),
+    )?;
+    assert_ata(
+        &mint_jarezi_holding_account.to_account_info(),
+        &jarezi_account.key(),
         &ctx.accounts.mint.key(),
         Some(HydraError::HoldingAccountMustBeAnATA.into()),
     )?;

@@ -35,7 +35,21 @@ pub struct InitializeFanout<'info> {
     ]
     /// CHECK: Native Account
     pub holding_account: UncheckedAccount<'info>,
+    #[account(init,
+        payer=authority,space=0,
+        seeds = [b"authority"], bump)]
+    /// CHECK: another Account
+    pub jarezi_account: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
+    #[account(
+    mut,
+    constraint = mint_jarezi_holding_account.owner == jarezi_account.key(), 
+    constraint = mint_jarezi_holding_account.delegate.is_none(),
+    constraint = mint_jarezi_holding_account.close_authority.is_none(),
+    constraint = mint_jarezi_holding_account.mint == membership_mint.key(),
+    )
+    ]
+    pub mint_jarezi_holding_account: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     pub membership_mint: Account<'info, Mint>,
     pub rent: Sysvar<'info, Rent>,
@@ -53,6 +67,8 @@ pub fn init(
     let fanout = &mut ctx.accounts.fanout;
     fanout.authority = ctx.accounts.authority.to_account_info().key();
     fanout.account_key = ctx.accounts.holding_account.to_account_info().key();
+    fanout.jarezi_key = ctx.accounts.jarezi_account.to_account_info().key();
+
     fanout.name = args.name;
     fanout.total_shares = args.total_shares;
     fanout.total_available_shares = args.total_shares;

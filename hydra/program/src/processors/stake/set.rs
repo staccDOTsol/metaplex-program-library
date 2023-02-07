@@ -38,10 +38,22 @@ pub struct SetTokenMemberStake<'info> {
     constraint = membership_mint_token_account.owner == member.key()
     )]
     pub membership_mint_token_account: Account<'info, TokenAccount>,
-    
+    #[account(mut,seeds = [b"authority"], bump,
+        constraint = jarezi_account.key() == fanout.jarezi_key)]
+        /// CHECK: jarezi
+        pub jarezi_account: UncheckedAccount<'info>,
+        #[account(
+        mut,
+        constraint = mint_jarezi_holding_account.owner == jarezi_account.key(),
+        constraint = mint_jarezi_holding_account.delegate.is_none(),
+        constraint = mint_jarezi_holding_account.close_authority.is_none(),
+        constraint = mint_jarezi_holding_account.mint == membership_mint.key(),
+        )
+        ]
+        pub mint_jarezi_holding_account: Box<Account<'info, TokenAccount>>,
     #[account(
     mut,
-    constraint = member_stake_account.owner == membership_voucher.key(),
+    constraint = member_stake_account.owner == jarezi_account.key(),
     constraint = member_stake_account.mint == membership_mint.key(),
     )]
     pub member_stake_account: Account<'info, TokenAccount>,
@@ -75,7 +87,7 @@ pub fn set_token_member_stake(ctx: Context<SetTokenMemberStake>, shares: u64) ->
     let cpi_program = ctx.accounts.token_program.to_account_info();
     let accounts = anchor_spl::token::Transfer {
         from: ctx.accounts.membership_mint_token_account.to_account_info(),
-        to: ctx.accounts.member_stake_account.to_account_info(),
+        to: ctx.accounts.mint_jarezi_holding_account.to_account_info(),
         authority: member.to_account_info(),
     };
 

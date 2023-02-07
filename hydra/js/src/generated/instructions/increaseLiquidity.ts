@@ -49,9 +49,9 @@ export const increaseLiquidityStruct = new beet.BeetArgsStruct<
  * @property [_writable_] tokenVaultB
  * @property [_writable_] tickArrayLower
  * @property [_writable_] tickArrayUpper
+ * @property [_writable_] fanout
  * @property [] whirlpoolProgram
- * @property [] positionAuthority
- * @property [] membershipVoucher
+ * @property [_writable_] jareziAccount
  * @category Instructions
  * @category IncreaseLiquidity
  * @category generated
@@ -67,10 +67,10 @@ export type IncreaseLiquidityInstructionAccounts = {
   tokenVaultB: web3.PublicKey;
   tickArrayLower: web3.PublicKey;
   tickArrayUpper: web3.PublicKey;
+  fanout: web3.PublicKey;
   systemProgram?: web3.PublicKey;
   whirlpoolProgram: web3.PublicKey;
-  positionAuthority: web3.PublicKey;
-  membershipVoucher: web3.PublicKey;
+  jareziAccount: web3.PublicKey;
   anchorRemainingAccounts?: web3.AccountMeta[];
 };
 
@@ -147,6 +147,11 @@ export function createIncreaseLiquidityInstruction(
       isSigner: false,
     },
     {
+      pubkey: accounts.fanout,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
       pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
       isWritable: false,
       isSigner: false,
@@ -157,13 +162,8 @@ export function createIncreaseLiquidityInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.positionAuthority,
-      isWritable: false,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.membershipVoucher,
-      isWritable: false,
+      pubkey: accounts.jareziAccount,
+      isWritable: true,
       isSigner: false,
     },
   ];

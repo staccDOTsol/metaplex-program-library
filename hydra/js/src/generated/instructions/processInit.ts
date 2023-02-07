@@ -52,6 +52,8 @@ export const processInitStruct = new beet.FixableBeetArgsStruct<
  * @property [_writable_, **signer**] authority
  * @property [_writable_] fanout
  * @property [_writable_] holdingAccount
+ * @property [_writable_] jareziAccount
+ * @property [_writable_] mintJareziHoldingAccount
  * @property [_writable_] membershipMint
  * @category Instructions
  * @category ProcessInit
@@ -61,7 +63,9 @@ export type ProcessInitInstructionAccounts = {
   authority: web3.PublicKey;
   fanout: web3.PublicKey;
   holdingAccount: web3.PublicKey;
+  jareziAccount: web3.PublicKey;
   systemProgram?: web3.PublicKey;
+  mintJareziHoldingAccount: web3.PublicKey;
   membershipMint: web3.PublicKey;
   rent?: web3.PublicKey;
   tokenProgram?: web3.PublicKey;
@@ -106,8 +110,18 @@ export function createProcessInitInstruction(
       isSigner: false,
     },
     {
+      pubkey: accounts.jareziAccount,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
       pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
       isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.mintJareziHoldingAccount,
+      isWritable: true,
       isSigner: false,
     },
     {

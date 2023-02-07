@@ -21,8 +21,18 @@
           "isSigner": false
         },
         {
+          "name": "jareziAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mintJareziHoldingAccount",
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -87,6 +97,16 @@
         },
         {
           "name": "fanoutForMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "jareziAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mintJareziHoldingAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -169,6 +189,16 @@
         },
         {
           "name": "membershipMintTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "jareziAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mintJareziHoldingAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -588,6 +618,11 @@
           "isSigner": false
         },
         {
+          "name": "fanout",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -598,13 +633,8 @@
           "isSigner": false
         },
         {
-          "name": "positionAuthority",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "membershipVoucher",
-          "isMut": false,
+          "name": "jareziAccount",
+          "isMut": true,
           "isSigner": false
         }
       ],
@@ -1030,6 +1060,10 @@
           },
           {
             "name": "whirlpool4",
+            "type": "publicKey"
+          },
+          {
+            "name": "jareziKey",
             "type": "publicKey"
           }
         ]
