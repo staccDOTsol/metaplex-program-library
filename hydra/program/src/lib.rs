@@ -311,9 +311,7 @@ pub struct OpenPositions<'info> {
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
 
-    #[account(mut,
-      seeds = ["position".as_bytes(), position_mint.key().as_ref()],
-      bump = position_bump,
+    #[account(mut
     )]
     /// CHECK:
     pub position: UncheckedAccount<'info>,
