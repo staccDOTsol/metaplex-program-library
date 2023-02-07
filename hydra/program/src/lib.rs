@@ -345,12 +345,12 @@ pub struct IncreaseLiq<'info> {
     pub token_program: Program<'info, Token>,
 
 
-    #[account(mut, has_one = whirlpool)]
-    pub position: Box<Account<'info, Position>>,
+    #[account(mut)]
+    /// CHECK:
+    pub position: UncheckedAccount<'info>,
     #[account(
-        constraint = position_token_account.mint == position.position_mint,
-        constraint = position_token_account.amount == 1
     )]
+    /// CHECK:
     pub position_token_account: Box<Account<'info, TokenAccount>>,
 
     #[account(mut, constraint = token_owner_account_a.mint == whirlpool.token_mint_a)]
