@@ -374,7 +374,9 @@ pub struct IncreaseLiq<'info> {
    
     pub system_program: Program<'info, System>,
     pub whirlpool_program: Program<'info, wpid>,
-
+    /// CHECK:
+pub position_authority: UncheckedAccount<'info>,
+/// CHECK:
         pub membership_voucher: Box<Account<'info, FanoutMembershipVoucher>>,
 }
 #[derive(Accounts)]

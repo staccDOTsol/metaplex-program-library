@@ -50,6 +50,7 @@ export const increaseLiquidityStruct = new beet.BeetArgsStruct<
  * @property [_writable_] tickArrayLower
  * @property [_writable_] tickArrayUpper
  * @property [] whirlpoolProgram
+ * @property [] positionAuthority
  * @property [] membershipVoucher
  * @category Instructions
  * @category IncreaseLiquidity
@@ -68,6 +69,7 @@ export type IncreaseLiquidityInstructionAccounts = {
   tickArrayUpper: web3.PublicKey;
   systemProgram?: web3.PublicKey;
   whirlpoolProgram: web3.PublicKey;
+  positionAuthority: web3.PublicKey;
   membershipVoucher: web3.PublicKey;
   anchorRemainingAccounts?: web3.AccountMeta[];
 };
@@ -151,6 +153,11 @@ export function createIncreaseLiquidityInstruction(
     },
     {
       pubkey: accounts.whirlpoolProgram,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.positionAuthority,
       isWritable: false,
       isSigner: false,
     },

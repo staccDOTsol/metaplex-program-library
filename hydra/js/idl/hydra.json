@@ -598,6 +598,11 @@
           "isSigner": false
         },
         {
+          "name": "positionAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "membershipVoucher",
           "isMut": false,
           "isSigner": false
