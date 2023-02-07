@@ -11,7 +11,7 @@ use state::{MembershipModel, Fanout, FanoutMembershipVoucher,};
 use whirlpools::program::Whirlpool as wpid;
 use whirlpools::{Position, TickArray};
 use whirlpools::state::Whirlpool;
-declare_id!("4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6");
+declare_id!("91TwXG4wTqJSm6GU8yn2AfBaTqvRi8XPurpkHHNVU7z4");
 #[program]
 pub mod hydra {
 
@@ -311,19 +311,19 @@ pub struct OpenPositions<'info> {
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
 
-    #[account(
+    #[account(mut,
       seeds = [b"position".as_ref(), position_mint.key().as_ref()],
       bump = position_bump,
     )]
-    pub position: Box<Account<'info, Position>>,
+    pub position: UncheckedAccount<'info>,
 
-    #[account(
+    #[account(mut
     )]
-    pub position_mint: Account<'info, Mint>,
+    pub position_mint: UncheckedAccount<'info>,
 
-    #[account(
+    #[account(mut
     )]
-    pub position_token_account: Box<Account<'info, TokenAccount>>,
+    pub position_token_account: UncheckedAccount<'info>,
 
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 

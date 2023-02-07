@@ -84,7 +84,7 @@ export const closePositionInstructionDiscriminator = [123, 134, 81, 0, 49, 68, 9
 export function createClosePositionInstruction(
   accounts: ClosePositionInstructionAccounts,
   args: ClosePositionInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('91TwXG4wTqJSm6GU8yn2AfBaTqvRi8XPurpkHHNVU7z4'),
 ) {
   const [data] = closePositionStruct.serialize({
     instructionDiscriminator: closePositionInstructionDiscriminator,

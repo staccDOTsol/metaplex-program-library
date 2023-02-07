@@ -84,7 +84,7 @@ export const openPositionInstructionDiscriminator = [135, 128, 47, 77, 15, 152, 
 export function createOpenPositionInstruction(
   accounts: OpenPositionInstructionAccounts,
   args: OpenPositionInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('91TwXG4wTqJSm6GU8yn2AfBaTqvRi8XPurpkHHNVU7z4'),
 ) {
   const [data] = openPositionStruct.serialize({
     instructionDiscriminator: openPositionInstructionDiscriminator,

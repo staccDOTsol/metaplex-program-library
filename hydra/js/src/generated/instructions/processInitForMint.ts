@@ -83,7 +83,7 @@ export const processInitForMintInstructionDiscriminator = [140, 150, 232, 195, 9
 export function createProcessInitForMintInstruction(
   accounts: ProcessInitForMintInstructionAccounts,
   args: ProcessInitForMintInstructionArgs,
-  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
+  programId = new web3.PublicKey('91TwXG4wTqJSm6GU8yn2AfBaTqvRi8XPurpkHHNVU7z4'),
 ) {
   const [data] = processInitForMintStruct.serialize({
     instructionDiscriminator: processInitForMintInstructionDiscriminator,
