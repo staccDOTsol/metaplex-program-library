@@ -40,22 +40,15 @@ export const openPositionStruct = new beet.BeetArgsStruct<
 /**
  * Accounts required by the _openPosition_ instruction
  *
- * @property [_writable_] funder
+ * @property [_writable_, **signer**] funder
  * @property [] owner
- * @property [_writable_] fanout
- * @property [_writable_] position
- * @property [_writable_] positionMint
- * @property [_writable_] positionTokenAccount
+ * @property [] position
+ * @property [] positionMint
+ * @property [] positionTokenAccount
  * @property [] whirlpool
  * @property [] associatedTokenProgram
  * @property [] whirlpoolProgram
- * @property [_writable_] tokenVaultA
- * @property [_writable_] tokenVaultB
  * @property [_writable_] membershipVoucher
- * @property [_writable_] tokenAccountA
- * @property [_writable_] tokenAccountB
- * @property [_writable_] tickArrayUpper
- * @property [_writable_] tickArrayLower
  * @category Instructions
  * @category OpenPosition
  * @category generated
@@ -63,7 +56,6 @@ export const openPositionStruct = new beet.BeetArgsStruct<
 export type OpenPositionInstructionAccounts = {
   funder: web3.PublicKey;
   owner: web3.PublicKey;
-  fanout: web3.PublicKey;
   position: web3.PublicKey;
   positionMint: web3.PublicKey;
   positionTokenAccount: web3.PublicKey;
@@ -73,13 +65,7 @@ export type OpenPositionInstructionAccounts = {
   rent?: web3.PublicKey;
   associatedTokenProgram: web3.PublicKey;
   whirlpoolProgram: web3.PublicKey;
-  tokenVaultA: web3.PublicKey;
-  tokenVaultB: web3.PublicKey;
   membershipVoucher: web3.PublicKey;
-  tokenAccountA: web3.PublicKey;
-  tokenAccountB: web3.PublicKey;
-  tickArrayUpper: web3.PublicKey;
-  tickArrayLower: web3.PublicKey;
   anchorRemainingAccounts?: web3.AccountMeta[];
 };
 
@@ -108,7 +94,7 @@ export function createOpenPositionInstruction(
     {
       pubkey: accounts.funder,
       isWritable: true,
-      isSigner: false,
+      isSigner: true,
     },
     {
       pubkey: accounts.owner,
@@ -116,23 +102,18 @@ export function createOpenPositionInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.fanout,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
       pubkey: accounts.position,
-      isWritable: true,
+      isWritable: false,
       isSigner: false,
     },
     {
       pubkey: accounts.positionMint,
-      isWritable: true,
+      isWritable: false,
       isSigner: false,
     },
     {
       pubkey: accounts.positionTokenAccount,
-      isWritable: true,
+      isWritable: false,
       isSigner: false,
     },
     {
@@ -166,37 +147,7 @@ export function createOpenPositionInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.tokenVaultA,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tokenVaultB,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
       pubkey: accounts.membershipVoucher,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tokenAccountA,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tokenAccountB,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tickArrayUpper,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tickArrayLower,
       isWritable: true,
       isSigner: false,
     },

@@ -59,7 +59,7 @@ export const processUnstakeInstructionDiscriminator = [217, 160, 136, 174, 149, 
  */
 export function createProcessUnstakeInstruction(
   accounts: ProcessUnstakeInstructionAccounts,
-  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
+  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
 ) {
   const [data] = processUnstakeStruct.serialize({
     instructionDiscriminator: processUnstakeInstructionDiscriminator,

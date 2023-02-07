@@ -36,14 +36,14 @@ export const closePositionStruct = new beet.BeetArgsStruct<
 /**
  * Accounts required by the _closePosition_ instruction
  *
- * @property [_writable_, **signer**] funder
+ * @property [_writable_] funder
  * @property [_writable_] owner
  * @property [_writable_] position
  * @property [_writable_] fanout
  * @property [_writable_] positionMint
  * @property [_writable_] positionTokenAccount
  * @property [_writable_] whirlpool
- * @property [] membershipVoucher
+ * @property [_writable_] membershipVoucher
  * @property [] associatedTokenProgram
  * @property [] whirlpoolProgram
  * @property [] user
@@ -84,7 +84,7 @@ export const closePositionInstructionDiscriminator = [123, 134, 81, 0, 49, 68, 9
 export function createClosePositionInstruction(
   accounts: ClosePositionInstructionAccounts,
   args: ClosePositionInstructionArgs,
-  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
+  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
 ) {
   const [data] = closePositionStruct.serialize({
     instructionDiscriminator: closePositionInstructionDiscriminator,
@@ -94,7 +94,7 @@ export function createClosePositionInstruction(
     {
       pubkey: accounts.funder,
       isWritable: true,
-      isSigner: true,
+      isSigner: false,
     },
     {
       pubkey: accounts.owner,
@@ -128,7 +128,7 @@ export function createClosePositionInstruction(
     },
     {
       pubkey: accounts.membershipVoucher,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {

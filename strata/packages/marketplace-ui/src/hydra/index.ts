@@ -13,7 +13,7 @@ import { AccountFetcher, ORCA_WHIRLPOOL_PROGRAM_ID,
   WhirlpoolIx} from '@orca-so/whirlpools-sdk'
   import {Instruction, MathUtil}from '@orca-so/common-sdk'
   import { PriceMath } from '@orca-so/whirlpools-sdk';
-  import  { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress }  from './spl-token/token0.2.0'
+  import  { createAssociatedTokenAccountInstruction, getAssociatedTokenAddress }  from './spl-token/token0.2.0/src'
 import { AnchorProvider, BorshAccountsCoder } from '@project-serum/anchor';
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -46,7 +46,6 @@ import {
   createProcessSetTokenMemberStakeInstruction,
   createOpenPositionInstruction,
   createIncreaseLiquidityInstruction,
-  createProcessSignMetadataInstruction,
   createProcessTransferSharesInstruction,
   createProcessUnstakeInstruction,
 } from './generated/instructions';
@@ -55,7 +54,7 @@ import { Fanout } from './generated/accounts';
 import { Key, PROGRAM_ADDRESS as TM_PROGRAM_ADDRESS } from '@metaplex-foundation/mpl-token-metadata';
 import bs58 from 'bs58';
 import { chunks } from './utils';
-import { createAssociatedTokenAccount, createMint, Mint, createAccount } from '../token0.2.0';
+import { createAssociatedTokenAccount, createMint, Mint, createAccount } from '../token0.2.0/src';
 import { getTokenAccount, NodeWallet } from '@project-serum/common';
 import { ASSOCIATED_PROGRAM_ID } from '@project-serum/anchor/dist/cjs/utils/token';
 import { deriveAssociatedTokenAddress } from '@orca-so/sdk';
@@ -1061,8 +1060,8 @@ signers.push(positionPk)
 
 const provider = new AnchorProvider(this.connection, this.wallet, {})
 let position =
-  PDAUtil.getPosition(ORCA_WHIRLPOOL_PROGRAM_ID, positionMint).publicKey
-  let positionTokenAccount = await deriveAssociatedTokenAddress(opts.member, positionMint);
+  PDAUtil.getPosition(FanoutClient.ID, positionMint).publicKey
+  let positionTokenAccount = await deriveAssociatedTokenAddress(voucher, positionMint);
     // @ts-ignore
 
   const ctx = WhirlpoolContext.withProvider(provider, ORCA_WHIRLPOOL_PROGRAM_ID);
@@ -1119,7 +1118,6 @@ console.log(123123123)
         {
   funder: opts.member,
   owner: voucher,
-  fanout: opts.fanout,
   position,
   positionMint,
   positionTokenAccount,
@@ -1129,15 +1127,11 @@ console.log(123123123)
   rent:SYSVAR_RENT_PUBKEY,
   associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
   whirlpoolProgram: ORCA_WHIRLPOOL_PROGRAM_ID,
-  tokenVaultA: tokenvaulta,
-  tokenVaultB: tokenvaultb,
-  membershipVoucher: voucher,
-  tokenAccountA: lalaa,
-  tokenAccountB: lalab,
-  tickArrayUpper: tickPdas2[0].publicKey,
-  tickArrayLower: tickPdas[0].publicKey },
+
+  membershipVoucher: voucher },
         {
-          bump: (await fetcher.getPool(whirlpool)).whirlpoolBump[0],
+          positionBump: _vbump,
+          bump: _vbump,
           tickSpacing:  (await fetcher.getPool(whirlpool)).tickSpacing
         },
       ),
@@ -1147,23 +1141,18 @@ console.log(123123123)
     instructions.push(
       createIncreaseLiquidityInstruction(
         {
-  funder: opts.member,
-  owner: voucher,
-  fanout: opts.fanout,
+  positionAuthority: voucher,
   position,
-  positionMint,
   positionTokenAccount,
   whirlpool:pool123,
   tokenProgram: TOKEN_PROGRAM_ID,
   systemProgram: SystemProgram.programId,
-  rent:SYSVAR_RENT_PUBKEY,
-  associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
   whirlpoolProgram: ORCA_WHIRLPOOL_PROGRAM_ID,
   tokenVaultA: tokenvaulta,
   tokenVaultB: tokenvaultb,
   membershipVoucher: voucher,
-  tokenAccountA: lalaa,
-  tokenAccountB: lalab,
+  tokenOwnerAccountA: lalaa,
+  tokenOwnerAccountB: lalab,
   tickArrayUpper: tickPdas2[0].publicKey,
   tickArrayLower: tickPdas[0].publicKey },
         {
@@ -1306,13 +1295,7 @@ for (var acc of Object.values(stuff)){
     const instructions: TransactionInstruction[] = [];
     const signers: Signer[] = [];
     instructions.push(
-      createProcessSignMetadataInstruction({
-        fanout: opts.fanout,
-        authority: authority,
-        holdingAccount: holdingAccount,
-        metadata: opts.metadata,
-        tokenMetadataProgram: new PublicKey(TM_PROGRAM_ADDRESS),
-      }),
+
     );
     return {
       output: {},

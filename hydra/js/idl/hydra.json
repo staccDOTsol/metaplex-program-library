@@ -338,37 +338,6 @@
       ]
     },
     {
-      "name": "processSignMetadata",
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "fanout",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "holdingAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "metadata",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "processTransferShares",
       "accounts": [
         {
@@ -497,7 +466,7 @@
         {
           "name": "funder",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "owner",
@@ -505,23 +474,18 @@
           "isSigner": false
         },
         {
-          "name": "fanout",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "position",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
           "name": "positionMint",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
           "name": "positionTokenAccount",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -555,37 +519,7 @@
           "isSigner": false
         },
         {
-          "name": "tokenVaultA",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenVaultB",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "membershipVoucher",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccountA",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccountB",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tickArrayUpper",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tickArrayLower",
           "isMut": true,
           "isSigner": false
         }
@@ -609,18 +543,18 @@
       "name": "increaseLiquidity",
       "accounts": [
         {
-          "name": "funder",
+          "name": "whirlpool",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "owner",
-          "isMut": true,
+          "name": "tokenProgram",
+          "isMut": false,
           "isSigner": false
         },
         {
-          "name": "fanout",
-          "isMut": true,
+          "name": "positionAuthority",
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -664,27 +598,7 @@
           "isSigner": false
         },
         {
-          "name": "whirlpool",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
         },
@@ -713,148 +627,6 @@
           "type": "u64"
         }
       ]
-    },
-    {
-      "name": "rewardies",
-      "accounts": [
-        {
-          "name": "funder",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "owner",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "position",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "positionMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "positionTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "whirlpool",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "whirlpoolProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "rewardVault",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "rewardOwnerAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "user",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "rewardIndex",
-          "type": "u8"
-        }
-      ]
-    },
-    {
-      "name": "yummyFees",
-      "accounts": [
-        {
-          "name": "funder",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "owner",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "position",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "positionMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "positionTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "whirlpool",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "whirlpoolProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenVaultA",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenVaultB",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccountA",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenAccountB",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "user",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
     },
     {
       "name": "emptyThemAll",

@@ -40,46 +40,37 @@ export const increaseLiquidityStruct = new beet.BeetArgsStruct<
 /**
  * Accounts required by the _increaseLiquidity_ instruction
  *
- * @property [_writable_, **signer**] funder
- * @property [_writable_] owner
- * @property [_writable_] fanout
- * @property [_writable_] position
- * @property [_writable_] positionMint
- * @property [_writable_] positionTokenAccount
  * @property [_writable_] whirlpool
- * @property [] associatedTokenProgram
- * @property [] whirlpoolProgram
+ * @property [] positionAuthority
+ * @property [_writable_] position
+ * @property [] positionTokenAccount
+ * @property [_writable_] tokenOwnerAccountA
+ * @property [_writable_] tokenOwnerAccountB
  * @property [_writable_] tokenVaultA
  * @property [_writable_] tokenVaultB
- * @property [] membershipVoucher
- * @property [_writable_] tokenAccountA
- * @property [_writable_] tokenAccountB
- * @property [_writable_] tickArrayUpper
  * @property [_writable_] tickArrayLower
+ * @property [_writable_] tickArrayUpper
+ * @property [] whirlpoolProgram
+ * @property [] membershipVoucher
  * @category Instructions
  * @category IncreaseLiquidity
  * @category generated
  */
 export type IncreaseLiquidityInstructionAccounts = {
-  funder: web3.PublicKey;
-  owner: web3.PublicKey;
-  fanout: web3.PublicKey;
-  position: web3.PublicKey;
-  positionMint: web3.PublicKey;
-  positionTokenAccount: web3.PublicKey;
   whirlpool: web3.PublicKey;
   tokenProgram?: web3.PublicKey;
-  systemProgram?: web3.PublicKey;
-  rent?: web3.PublicKey;
-  associatedTokenProgram: web3.PublicKey;
-  whirlpoolProgram: web3.PublicKey;
+  positionAuthority: web3.PublicKey;
+  position: web3.PublicKey;
+  positionTokenAccount: web3.PublicKey;
+  tokenOwnerAccountA: web3.PublicKey;
+  tokenOwnerAccountB: web3.PublicKey;
   tokenVaultA: web3.PublicKey;
   tokenVaultB: web3.PublicKey;
-  membershipVoucher: web3.PublicKey;
-  tokenAccountA: web3.PublicKey;
-  tokenAccountB: web3.PublicKey;
-  tickArrayUpper: web3.PublicKey;
   tickArrayLower: web3.PublicKey;
+  tickArrayUpper: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+  whirlpoolProgram: web3.PublicKey;
+  membershipVoucher: web3.PublicKey;
   anchorRemainingAccounts?: web3.AccountMeta[];
 };
 
@@ -98,43 +89,13 @@ export const increaseLiquidityInstructionDiscriminator = [46, 156, 243, 118, 13,
 export function createIncreaseLiquidityInstruction(
   accounts: IncreaseLiquidityInstructionAccounts,
   args: IncreaseLiquidityInstructionArgs,
-  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
+  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
 ) {
   const [data] = increaseLiquidityStruct.serialize({
     instructionDiscriminator: increaseLiquidityInstructionDiscriminator,
     ...args,
   });
   const keys: web3.AccountMeta[] = [
-    {
-      pubkey: accounts.funder,
-      isWritable: true,
-      isSigner: true,
-    },
-    {
-      pubkey: accounts.owner,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.fanout,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.position,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.positionMint,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.positionTokenAccount,
-      isWritable: true,
-      isSigner: false,
-    },
     {
       pubkey: accounts.whirlpool,
       isWritable: true,
@@ -146,23 +107,28 @@ export function createIncreaseLiquidityInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
+      pubkey: accounts.positionAuthority,
       isWritable: false,
       isSigner: false,
     },
     {
-      pubkey: accounts.rent ?? web3.SYSVAR_RENT_PUBKEY,
+      pubkey: accounts.position,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.positionTokenAccount,
       isWritable: false,
       isSigner: false,
     },
     {
-      pubkey: accounts.associatedTokenProgram,
-      isWritable: false,
+      pubkey: accounts.tokenOwnerAccountA,
+      isWritable: true,
       isSigner: false,
     },
     {
-      pubkey: accounts.whirlpoolProgram,
-      isWritable: false,
+      pubkey: accounts.tokenOwnerAccountB,
+      isWritable: true,
       isSigner: false,
     },
     {
@@ -176,17 +142,7 @@ export function createIncreaseLiquidityInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.membershipVoucher,
-      isWritable: false,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tokenAccountA,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.tokenAccountB,
+      pubkey: accounts.tickArrayLower,
       isWritable: true,
       isSigner: false,
     },
@@ -196,8 +152,18 @@ export function createIncreaseLiquidityInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.tickArrayLower,
-      isWritable: true,
+      pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.whirlpoolProgram,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.membershipVoucher,
+      isWritable: false,
       isSigner: false,
     },
   ];

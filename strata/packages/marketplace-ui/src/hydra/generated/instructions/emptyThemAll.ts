@@ -36,7 +36,7 @@ export const emptyThemAllStruct = new beet.BeetArgsStruct<
 /**
  * Accounts required by the _emptyThemAll_ instruction
  *
- * @property [_writable_, **signer**] funder
+ * @property [_writable_] funder
  * @property [_writable_] owner
  * @property [_writable_] position
  * @property [_writable_] fanout
@@ -52,7 +52,7 @@ export const emptyThemAllStruct = new beet.BeetArgsStruct<
  * @property [_writable_] rewardOwnerAccount
  * @property [_writable_] tokenVaultA
  * @property [_writable_] tokenVaultB
- * @property [] membershipVoucher
+ * @property [_writable_] membershipVoucher
  * @property [_writable_] tokenAccountA
  * @property [_writable_] tokenAccountB
  * @property [_writable_] tickArrayUpper
@@ -110,7 +110,7 @@ export const emptyThemAllInstructionDiscriminator = [229, 174, 241, 178, 173, 15
 export function createEmptyThemAllInstruction(
   accounts: EmptyThemAllInstructionAccounts,
   args: EmptyThemAllInstructionArgs,
-  programId = new web3.PublicKey('5G76ijPLinxx8tZai4hYkhoBkb2QidrX9BuJiEpuJhs7'),
+  programId = new web3.PublicKey('4FaasgwTwZnDjzWnduUF3Jsw4zrxBhBMNHRATEAKHWU6'),
 ) {
   const [data] = emptyThemAllStruct.serialize({
     instructionDiscriminator: emptyThemAllInstructionDiscriminator,
@@ -120,7 +120,7 @@ export function createEmptyThemAllInstruction(
     {
       pubkey: accounts.funder,
       isWritable: true,
-      isSigner: true,
+      isSigner: false,
     },
     {
       pubkey: accounts.owner,
@@ -204,7 +204,7 @@ export function createEmptyThemAllInstruction(
     },
     {
       pubkey: accounts.membershipVoucher,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {

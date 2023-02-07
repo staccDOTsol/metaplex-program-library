@@ -63,9 +63,6 @@ pub mod hydra {
         distribute_for_token(ctx, distribute_for_mint)
     }
 
-    pub fn process_sign_metadata(ctx: Context<SignMetadata>) -> Result<()> {
-        sign_metadata(ctx)
-    }
 
     pub fn process_transfer_shares(ctx: Context<TransferShares>, shares: u64) -> Result<()> {
         transfer_shares(ctx, shares)
@@ -175,7 +172,7 @@ pub mod hydra {
             CpiContext::new_with_signer(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::IncreaseLiquidity {
-                    position_authority: ctx.accounts.membership_voucher.to_account_info(),
+                    position_authority: ctx.accounts.position_authority.to_account_info(),
 
                     token_owner_account_a: ctx.accounts.token_owner_account_a.to_account_info(),
 
@@ -196,62 +193,6 @@ pub mod hydra {
             shares.into(),
             0,
         )?;
-        Ok(())
-    }
-
-    pub fn rewardies(ctx: Context<Rewardies>, reward_index: u8) -> Result<()> {
-        let user = &mut ctx.accounts.user;
-        if true {
-            let position = &ctx.accounts.position;
-            let position_token_account = &ctx.accounts.position_token_account;
-
-            let whirlpool = &ctx.accounts.whirlpool;
-            whirlpools::cpi::collect_reward(
-                CpiContext::new(
-                    ctx.accounts.whirlpool_program.to_account_info(),
-                    whirlpools::cpi::accounts::CollectReward {
-                        position_authority: ctx.accounts.owner.to_account_info(),
-                        position: position.to_account_info(),
-                        reward_owner_account: ctx.accounts.reward_owner_account.to_account_info(),
-                        reward_vault: ctx.accounts.reward_vault.to_account_info(),
-                        position_token_account: position_token_account.to_account_info(),
-                        token_program: ctx.accounts.token_program.to_account_info(),
-                        whirlpool: whirlpool.to_account_info(),
-                    },
-                ),
-                reward_index,
-            )?;
-
-            user.rewards = false;
-            drop(user);
-        }
-        Ok(())
-    }
-    pub fn yummy_fees(ctx: Context<YummyFees>) -> Result<()> {
-        let whirlpool = &ctx.accounts.whirlpool;
-        let user = &mut ctx.accounts.user;
-        if user.fees == true {
-            let position = &ctx.accounts.position;
-            let position_token_account = &ctx.accounts.position_token_account;
-
-            whirlpools::cpi::collect_fees(CpiContext::new(
-                ctx.accounts.whirlpool_program.to_account_info(),
-                whirlpools::cpi::accounts::CollectFees {
-                    position_authority: ctx.accounts.owner.to_account_info(),
-                    position: position.to_account_info(),
-                    position_token_account: position_token_account.to_account_info(),
-                    token_program: ctx.accounts.token_program.to_account_info(),
-
-                    token_owner_account_a: ctx.accounts.token_account_a.to_account_info(),
-
-                    token_owner_account_b: ctx.accounts.token_account_b.to_account_info(),
-                    token_vault_a: ctx.accounts.token_vault_a.to_account_info(),
-                    token_vault_b: ctx.accounts.token_vault_b.to_account_info(),
-                    whirlpool: whirlpool.to_account_info(),
-                },
-            ))?;
-            user.fees = false;
-        }
         Ok(())
     }
     pub fn empty_them_all(ctx: Context<EmptyThemAll>, _bump: u8) -> Result<()> {
@@ -366,74 +307,49 @@ pub mod hydra {
 #[instruction(bump: u8, position_bump: u8)]
 pub struct OpenPositions<'info> {
     #[account(mut)]
-    /// CHECK: orca check
-    pub funder: UncheckedAccount<'info>,
+    pub funder: Signer<'info>,
     /// CHECK:
     pub owner: UncheckedAccount<'info>,
-    #[account(mut)]
-    /// CHECK:
-    pub fanout: Account<'info, Fanout>,
 
-    #[account(mut,
-        seeds = [b"position".as_ref(), position_mint.key().as_ref()],
-    bump      )]
-      pub position: Account<'info, Position>,
-  
-      #[account(mut,
-          mint::authority = whirlpool,
-          mint::decimals = 0,
-      )]
-      pub position_mint: Account<'info, Mint>,
-  
-      #[account(mut,
-        associated_token::mint = position_mint,
-        associated_token::authority = owner,
-      )]
-      pub position_token_account: Box<Account<'info, TokenAccount>>,
+    #[account(
+      seeds = [b"position".as_ref(), position_mint.key().as_ref()],
+      bump = position_bump,
+    )]
+    pub position: Box<Account<'info, Position>>,
 
-    pub whirlpool: Account<'info, Whirlpool>,
+    #[account(
+    )]
+    pub position_mint: Account<'info, Mint>,
 
-   
+    #[account(
+    )]
+    pub position_token_account: Box<Account<'info, TokenAccount>>,
+
+    pub whirlpool: Box<Account<'info, Whirlpool>>,
+
     #[account(address = token::ID)]
     pub token_program: Program<'info, Token>,
+
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub whirlpool_program: Program<'info, wpid>,
-
-    #[account(mut)]
-    pub token_vault_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_vault_b: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
-    #[account(mut)]
-    pub token_account_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_account_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-
-    /// CHECK:
-    pub tick_array_upper: UncheckedAccount<'info>,
-    #[account(mut)]
-
-    /// CHECK:
-    pub tick_array_lower: UncheckedAccount<'info>,
 }
 
 #[derive(Accounts)]
 #[instruction(bump: u8)]
 pub struct IncreaseLiq<'info> {
     #[account(mut)]
-    /// CHECK: orca check
-    pub funder: UncheckedAccount<'info>,
-    #[account(mut)]
-    /// CHECK:
-    pub owner: UncheckedAccount<'info>,
+    pub whirlpool: Account<'info, Whirlpool>,
 
-    #[account(mut)]
+    #[account(address = token::ID)]
+    pub token_program: Program<'info, Token>,
+
     /// CHECK:
-    pub fanout: Account<'info, Fanout>,
+    pub position_authority: UncheckedAccount<'info>,
+
     #[account(mut, has_one = whirlpool)]
     pub position: Account<'info, Position>,
     #[account(
@@ -457,74 +373,12 @@ pub struct IncreaseLiq<'info> {
     #[account(mut, has_one = whirlpool)]
     pub tick_array_upper: AccountLoader<'info, TickArray>,
 
-
-    #[account(mut)]
-    pub whirlpool: Box<Account<'info, Whirlpool>>,
-
    
-    #[account(address = token::ID)]
-    pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
-    pub rent: Sysvar<'info, Rent>,
-    pub associated_token_program: Program<'info, AssociatedToken>,
     pub whirlpool_program: Program<'info, wpid>,
 
         pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
 }
-#[derive(Accounts)]
-#[instruction(bump: u8)]
-pub struct OpenPositionsHehe<'info> {
-    #[account(mut)]
-    /// CHECK: orca check
-    pub funder: UncheckedAccount<'info>,
-    #[account(mut)]
-    /// CHECK:
-    pub owner: UncheckedAccount<'info>,
-
-    #[account(mut)]
-    /// CHECK:
-    pub position: UncheckedAccount<'info>,
-
-    #[account(mut)]
-    pub position_mint: Signer<'info>,
-
-    #[account(mut)]
-    /// CHECK:
-    pub position_token_account: UncheckedAccount<'info>,
-
-    #[account(mut)]
-    pub whirlpool: Box<Account<'info, Whirlpool>>,
-
-   
-    pub token_program: Program<'info, Token>,
-    pub system_program: Program<'info, System>,
-    pub rent: Sysvar<'info, Rent>,
-    pub associated_token_program: Program<'info, AssociatedToken>,
-    pub whirlpool_program: Program<'info, wpid>,
-
-    #[account(mut)]
-    pub token_vault_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_account_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_account_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-
-    /// CHECK:
-    pub tick_array_upper: UncheckedAccount<'info>,
-    #[account(mut)]
-
-    /// CHECK:
-    pub tick_array_lower: UncheckedAccount<'info>,
-
-    #[account(seeds=[STATE_SEED,
-        &whirlpool.key().to_bytes(), &owner.key().to_bytes()
-           ], bump)]
-    pub user: Box<Account<'info, UserState>>,
-}
-
 #[derive(Accounts)]
 #[instruction(bump: u8)]
 pub struct ClosePositions<'info> {
@@ -653,88 +507,6 @@ pub struct EmptyThemAll<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-#[derive(Accounts)]
-#[instruction(reward_index: u8)]
-
-pub struct Rewardies<'info> {
-    #[account(mut)]
-    /// CHECK: orca check
-    pub funder: UncheckedAccount<'info>,
-    #[account(mut)]
-    /// CHECK:
-    pub owner: UncheckedAccount<'info>,
-    #[account(mut)]
-    /// CHECK: checked in orca
-    pub position: Box<Account<'info, Position>>,
-
-    #[account(mut)]
-
-    /// CHECK:
-    pub position_mint: Box<Account<'info, Mint>>,
-
-    #[account(mut)]
-    /// CHECK:
-    pub position_token_account: UncheckedAccount<'info>,
-
-    #[account(mut)]
-    pub whirlpool: Box<Account<'info, Whirlpool>>,
-
-   
-    pub token_program: Program<'info, Token>,
-    pub whirlpool_program: Program<'info, wpid>,
-    #[account(mut)]
-    pub reward_vault: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub reward_owner_account: Box<Account<'info, TokenAccount>>,
-    #[account(seeds=[STATE_SEED,
-        &whirlpool.key().to_bytes(), &owner.key().to_bytes()
-           ], bump)]
-    pub user: Box<Account<'info, UserState>>,
-}
-
-#[derive(Accounts)]
-#[instruction(bump: u8, reward_index: u8)]
-pub struct YummyFees<'info> {
-    #[account(mut)]
-    /// CHECK: orca check
-    pub funder: UncheckedAccount<'info>,
-    #[account(mut)]
-    /// CHECK:
-    pub owner: UncheckedAccount<'info>,
-
-    #[account(mut)]
-    /// CHECK: checked in orca
-    pub position: Box<Account<'info, Position>>,
-
-    #[account(mut)]
-
-    /// CHECK:
-    pub position_mint: Box<Account<'info, Mint>>,
-
-    #[account(mut)]
-    /// CHECK:
-    pub position_token_account: UncheckedAccount<'info>,
-
-    #[account(mut)]
-    pub whirlpool: Box<Account<'info, Whirlpool>>,
-
-   
-    pub token_program: Program<'info, Token>,
-    pub associated_token_program: Program<'info, AssociatedToken>,
-    pub whirlpool_program: Program<'info, wpid>,
-    #[account(mut)]
-    pub token_vault_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_vault_b: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_account_a: Box<Account<'info, TokenAccount>>,
-    #[account(mut)]
-    pub token_account_b: Box<Account<'info, TokenAccount>>,
-    #[account(seeds=[STATE_SEED,
-        &whirlpool.key().to_bytes(), &owner.key().to_bytes()
-           ], bump)]
-    pub user: Box<Account<'info, UserState>>,
-}
 
 #[derive(Accounts)]
 pub struct CheckPosition<'info> {
