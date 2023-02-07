@@ -172,7 +172,7 @@ pub mod hydra {
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::IncreaseLiquidity {
 
-                    position_authority: ctx.accounts.membership_voucher.to_account_info(),
+                    position_authority: ctx.accounts.position_authority.to_account_info(),
 
                     token_owner_account_a: ctx.accounts.token_owner_account_a.to_account_info(),
 
