@@ -9,7 +9,7 @@ use anchor_spl::token::{self, Mint, Token, TokenAccount};
 use processors::*;
 use state::{MembershipModel, Fanout, FanoutMembershipVoucher,};
 use whirlpools::program::Whirlpool as wpid;
-use whirlpools::{Position, TickArray};
+use whirlpools::{Position};
 use whirlpools::state::Whirlpool;
 declare_id!("91TwXG4wTqJSm6GU8yn2AfBaTqvRi8XPurpkHHNVU7z4");
 #[program]
@@ -363,10 +363,12 @@ pub struct IncreaseLiq<'info> {
     #[account(mut, constraint = token_vault_b.key() == whirlpool.token_vault_b)]
     pub token_vault_b: Box<Account<'info, TokenAccount>>,
 
-    #[account(mut, has_one = whirlpool)]
-    pub tick_array_lower: AccountLoader<'info, TickArray>,
-    #[account(mut, has_one = whirlpool)]
-    pub tick_array_upper: AccountLoader<'info, TickArray>,
+    #[account(mut)]
+    /// CHECK:
+    pub tick_array_lower: UncheckedAccount<'info>,
+    #[account(mut)]
+    /// CHECK:
+    pub tick_array_upper: UncheckedAccount<'info>,
 
    
     pub system_program: Program<'info, System>,
