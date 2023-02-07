@@ -312,17 +312,20 @@ pub struct OpenPositions<'info> {
     pub owner: UncheckedAccount<'info>,
 
     #[account(mut,
-      seeds = [b"position".as_ref(), position_mint.key().as_ref()],
+      seeds = ["position".as_bytes(), position_mint.key().as_ref()],
       bump = position_bump,
     )]
+    /// CHECK:
     pub position: UncheckedAccount<'info>,
 
     #[account(mut
     )]
+    /// CHECK:
     pub position_mint: UncheckedAccount<'info>,
 
     #[account(mut
     )]
+    /// CHECK:
     pub position_token_account: UncheckedAccount<'info>,
 
     pub whirlpool: Box<Account<'info, Whirlpool>>,
