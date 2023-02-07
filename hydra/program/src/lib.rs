@@ -129,7 +129,7 @@ pub mod hydra {
         &[ctx.accounts.membership_voucher.bump_seed],
         ];
         whirlpools::cpi::open_position(
-            CpiContext::new_with_signer(
+            CpiContext::new(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::OpenPosition {
                     associated_token_program: ctx
@@ -145,7 +145,7 @@ pub mod hydra {
                     token_program: ctx.accounts.token_program.to_account_info(),
                     system_program: ctx.accounts.system_program.to_account_info(),
                     rent: ctx.accounts.rent.to_account_info(),
-                },&[&seeds],
+                }
             ),
             whirlpools::OpenPositionBumps {
                 position_bump: bump,
