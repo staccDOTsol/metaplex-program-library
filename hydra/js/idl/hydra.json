@@ -548,11 +548,6 @@
           "isSigner": false
         },
         {
-          "name": "positionAuthority",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "position",
           "isMut": true,
           "isSigner": false

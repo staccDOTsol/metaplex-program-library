@@ -169,7 +169,8 @@ pub mod hydra {
             CpiContext::new_with_signer(
                 ctx.accounts.whirlpool_program.to_account_info(),
                 whirlpools::cpi::accounts::IncreaseLiquidity {
-                    position_authority: ctx.accounts.position_authority.to_account_info(),
+
+                    position_authority: ctx.accounts.membership_voucher.to_account_info(),
 
                     token_owner_account_a: ctx.accounts.token_owner_account_a.to_account_info(),
 
@@ -343,11 +344,9 @@ pub struct IncreaseLiq<'info> {
     #[account(address = token::ID)]
     pub token_program: Program<'info, Token>,
 
-    /// CHECK:
-    pub position_authority: UncheckedAccount<'info>,
 
     #[account(mut, has_one = whirlpool)]
-    pub position: Account<'info, Position>,
+    pub position: Box<Account<'info, Position>>,
     #[account(
         constraint = position_token_account.mint == position.position_mint,
         constraint = position_token_account.amount == 1
@@ -373,7 +372,7 @@ pub struct IncreaseLiq<'info> {
     pub system_program: Program<'info, System>,
     pub whirlpool_program: Program<'info, wpid>,
 
-        pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
+        pub membership_voucher: Box<Account<'info, FanoutMembershipVoucher>>,
 }
 #[derive(Accounts)]
 #[instruction(bump: u8)]
@@ -404,7 +403,7 @@ pub struct ClosePositions<'info> {
     pub whirlpool: Box<Account<'info, Whirlpool>>,
     
     #[account(mut)]
-        pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
+        pub membership_voucher: Box<Account<'info, FanoutMembershipVoucher>>,
   
    
     pub token_program: Program<'info, Token>,

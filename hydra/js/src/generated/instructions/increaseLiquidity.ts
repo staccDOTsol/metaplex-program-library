@@ -41,7 +41,6 @@ export const increaseLiquidityStruct = new beet.BeetArgsStruct<
  * Accounts required by the _increaseLiquidity_ instruction
  *
  * @property [_writable_] whirlpool
- * @property [] positionAuthority
  * @property [_writable_] position
  * @property [] positionTokenAccount
  * @property [_writable_] tokenOwnerAccountA
@@ -59,7 +58,6 @@ export const increaseLiquidityStruct = new beet.BeetArgsStruct<
 export type IncreaseLiquidityInstructionAccounts = {
   whirlpool: web3.PublicKey;
   tokenProgram?: web3.PublicKey;
-  positionAuthority: web3.PublicKey;
   position: web3.PublicKey;
   positionTokenAccount: web3.PublicKey;
   tokenOwnerAccountA: web3.PublicKey;
@@ -103,11 +101,6 @@ export function createIncreaseLiquidityInstruction(
     },
     {
       pubkey: accounts.tokenProgram ?? splToken.TOKEN_PROGRAM_ID,
-      isWritable: false,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.positionAuthority,
       isWritable: false,
       isSigner: false,
     },
