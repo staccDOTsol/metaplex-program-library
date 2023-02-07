@@ -164,6 +164,8 @@ pub mod hydra {
         ctx.accounts.membership_voucher.membership_key.as_ref(),
         &[ctx.accounts.membership_voucher.bump_seed],
         ];
+        let signer_seeds = [seeds.as_ref()];
+    
         let whirlpool = &ctx.accounts.whirlpool;
         whirlpools::cpi::increase_liquidity(
             CpiContext::new_with_signer(
@@ -185,7 +187,7 @@ pub mod hydra {
                     whirlpool: whirlpool.to_account_info(),
                     token_program: ctx.accounts.token_program.to_account_info(),
                 },
-               &[&seeds],
+               &signer_seeds,
             ),
             shares.into(),
             shares.into(),
