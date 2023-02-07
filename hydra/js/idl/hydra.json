@@ -517,11 +517,6 @@
           "name": "whirlpoolProgram",
           "isMut": false,
           "isSigner": false
-        },
-        {
-          "name": "membershipVoucher",
-          "isMut": true,
-          "isSigner": false
         }
       ],
       "args": [

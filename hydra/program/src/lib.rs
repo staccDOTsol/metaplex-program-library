@@ -124,10 +124,7 @@ pub mod hydra {
             + whirlpool.tick_spacing as i32 * 2;
         msg!(&tick_lower_index.to_string().to_owned());
         msg!(&tick_upper_index.to_string().to_owned());
-        let seeds = [b"fanout-membership", ctx.accounts.membership_voucher.fanout.as_ref(), 
-        ctx.accounts.membership_voucher.membership_key.as_ref(),
-        &[ctx.accounts.membership_voucher.bump_seed],
-        ];
+       
         whirlpools::cpi::open_position(
             CpiContext::new(
                 ctx.accounts.whirlpool_program.to_account_info(),
@@ -137,7 +134,7 @@ pub mod hydra {
                         .associated_token_program
                         .to_account_info(),
                     funder: ctx.accounts.funder.to_account_info(),
-                    owner : ctx.accounts.membership_voucher.to_account_info(),
+                    owner : ctx.accounts.owner.to_account_info(),
                     position: nposition.to_account_info(),
                     position_mint: nposition_mint.to_account_info(),
                     position_token_account: nposition_token_account.to_account_info(),
@@ -335,8 +332,6 @@ pub struct OpenPositions<'info> {
     pub rent: Sysvar<'info, Rent>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub whirlpool_program: Program<'info, wpid>,
-    #[account(mut)]
-        pub membership_voucher: Account<'info, FanoutMembershipVoucher>,
 }
 
 #[derive(Accounts)]

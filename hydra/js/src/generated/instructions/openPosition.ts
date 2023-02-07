@@ -48,7 +48,6 @@ export const openPositionStruct = new beet.BeetArgsStruct<
  * @property [] whirlpool
  * @property [] associatedTokenProgram
  * @property [] whirlpoolProgram
- * @property [_writable_] membershipVoucher
  * @category Instructions
  * @category OpenPosition
  * @category generated
@@ -65,7 +64,6 @@ export type OpenPositionInstructionAccounts = {
   rent?: web3.PublicKey;
   associatedTokenProgram: web3.PublicKey;
   whirlpoolProgram: web3.PublicKey;
-  membershipVoucher: web3.PublicKey;
   anchorRemainingAccounts?: web3.AccountMeta[];
 };
 
@@ -144,11 +142,6 @@ export function createOpenPositionInstruction(
     {
       pubkey: accounts.whirlpoolProgram,
       isWritable: false,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.membershipVoucher,
-      isWritable: true,
       isSigner: false,
     },
   ];
