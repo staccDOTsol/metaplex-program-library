@@ -316,12 +316,12 @@ pub struct OpenPositions<'info> {
     #[account(mut
     )]
     /// CHECK:
-    pub position_mint: UncheckedAccount<'info>,
+    pub position_mint: Box<Account<'info,Mint>>,
 
     #[account(mut
     )]
     /// CHECK:
-    pub position_token_account: UncheckedAccount<'info>,
+    pub position_token_account: Box<Account<'info, TokenAccount>>,
 
     pub whirlpool: Box<Account<'info, Whirlpool>>,
 
