@@ -347,9 +347,8 @@ pub struct IncreaseLiq<'info> {
     pub token_program: Program<'info, Token>,
 
 
-    #[account(mut)]
-    /// CHECK:
-    pub position: UncheckedAccount<'info>,
+    #[account(mut, has_one = whirlpool)]
+    pub position: Account<'info, Position>,
     #[account(
     )]
     /// CHECK:
