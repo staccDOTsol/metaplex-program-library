@@ -5,7 +5,7 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as splToken from '@solana/spl-token';
+
 import * as beet from '@metaplex-foundation/beet';
 import * as web3 from '@solana/web3.js';
 
@@ -123,14 +123,14 @@ export function createProcessSetTokenMemberStakeInstruction(
       isSigner: false,
     },
     {
-      pubkey: splToken.TOKEN_PROGRAM_ID,
+      pubkey: new web3.PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"),
       isWritable: false,
       isSigner: false,
     },
   ];
 
   const ix = new web3.TransactionInstruction({
-    programId: new web3.PublicKey('hyDQ4Nz1eYyegS6JfenyKwKzYxRsCWCriYSAjtzP4Vg'),
+    programId: new web3.PublicKey('JARe5SbGC4dtrAchwcNSnzTdN4MHxGR3moMNmWEVg7hp'),
     keys,
     data,
   });

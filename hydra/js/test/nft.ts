@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Connection, Keypair } from '@solana/web3.js';
+import { Connection, Keypair, PublicKey } from '@solana/web3.js';
 import {
   NATIVE_MINT,
-  ASSOCIATED_TOKEN_PROGRAM_ID,
   Token,
-  TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
 import { expect, use } from 'chai';
 import ChaiAsPromised from 'chai-as-promised';
@@ -21,6 +19,8 @@ import { builtNftFanout } from './utils/scenarios';
 import { keypairIdentity, Metaplex } from '@metaplex-foundation/js';
 import { Wallet } from '@project-serum/anchor';
 
+const ASSOCIATED_TOKEN_PROGRAM_ID = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb")
+const TOKEN_PROGRAM_ID = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb")
 use(ChaiAsPromised);
 
 describe('fanout', async () => {

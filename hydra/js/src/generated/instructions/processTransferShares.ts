@@ -111,7 +111,7 @@ export function createProcessTransferSharesInstruction(
   ];
 
   const ix = new web3.TransactionInstruction({
-    programId: new web3.PublicKey('hyDQ4Nz1eYyegS6JfenyKwKzYxRsCWCriYSAjtzP4Vg'),
+    programId: new web3.PublicKey('JARe5SbGC4dtrAchwcNSnzTdN4MHxGR3moMNmWEVg7hp'),
     keys,
     data,
   });

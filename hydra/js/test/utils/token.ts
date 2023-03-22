@@ -1,12 +1,13 @@
 import { Provider } from '@project-serum/anchor';
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
   NATIVE_MINT,
   Token,
-  TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
 import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import { expect } from 'chai';
+
+const ASSOCIATED_TOKEN_PROGRAM_ID = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb")
+const TOKEN_PROGRAM_ID = new PublicKey("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb")
 export class TokenUtils {
   provider: Provider;
 

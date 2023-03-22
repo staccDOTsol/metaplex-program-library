@@ -8,7 +8,7 @@ const binaryInstallDir = path.join(__dirname, '.crates');
 module.exports = {
   idlGenerator: 'anchor',
   programName: 'hydra',
-  programId: 'hyDQ4Nz1eYyegS6JfenyKwKzYxRsCWCriYSAjtzP4Vg',
+  programId: 'JARe5SbGC4dtrAchwcNSnzTdN4MHxGR3moMNmWEVg7hp',
   idlDir,
   sdkDir,
   binaryInstallDir,

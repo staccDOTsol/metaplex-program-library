@@ -1,4 +1,4 @@
-# mpl-hydra
+# jaredra
 
 This package contains the hydra contract SDK code.
 
