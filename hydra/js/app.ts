@@ -10,7 +10,7 @@ import {
   FanoutClient,
 } from "./src"
 setTimeout(async function(){
-  const connection = new Connection("https://rpc.helius.xyz?api-key=8913a285-a5ef-4c35-8d80-03fb276eff2f", "confirmed");
+  const connection = new Connection("https://rpc.helius.xyz?api-key=-4c35-8d80-03fb276eff2f", "confirmed");
   let fanoutSdk: FanoutClient;
     //await airdrop(connection, authorityWallet.publicKey, LAMPORTS_PER_SOL * 10);
     fanoutSdk = new FanoutClient(
